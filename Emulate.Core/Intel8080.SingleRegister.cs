@@ -1,4 +1,9 @@
-﻿using System;
+﻿// <copyright file="Intel8080.SingleRegister.cs" company="Crankery">
+// Copyright (c) 2014 All Rights Reserved
+// </copyright>
+// <author>Dave Hamilton</author>
+
+using System;
 
 namespace Crankery.Emulate.Core
 {

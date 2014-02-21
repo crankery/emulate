@@ -1,4 +1,9 @@
-﻿namespace Crankery.Emulate.Core
+﻿// <copyright file="Intel8080.cs" company="Crankery">
+// Copyright (c) 2014 All Rights Reserved
+// </copyright>
+// <author>Dave Hamilton</author>
+
+namespace Crankery.Emulate.Core
 {
     using System;
     using System.Collections.Generic;
@@ -6,7 +11,6 @@
     using System.Linq;
     using System.Reflection;
     using System.Text;
-    using System.Threading.Tasks;
 
     public partial class Intel8080
     {

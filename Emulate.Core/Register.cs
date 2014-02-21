@@ -1,4 +1,9 @@
-﻿namespace Crankery.Emulate.Core
+﻿// <copyright file="Register.cs" company="Crankery">
+// Copyright (c) 2014 All Rights Reserved
+// </copyright>
+// <author>Dave Hamilton</author>
+
+namespace Crankery.Emulate.Core
 {
     public enum Register
     {

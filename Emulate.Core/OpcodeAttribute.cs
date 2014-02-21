@@ -1,7 +1,12 @@
-﻿using System;
+﻿// <copyright file="OpcodeAttribute.cs" company="Crankery">
+// Copyright (c) 2014 All Rights Reserved
+// </copyright>
+// <author>Dave Hamilton</author>
 
 namespace Crankery.Emulate.Core
 {
+    using System;
+
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = true)]
     public class OpcodeAttribute : Attribute
     {

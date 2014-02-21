@@ -1,4 +1,9 @@
-﻿using System.Reflection;
+﻿// <copyright file="Utility.cs" company="Crankery">
+// Copyright (c) 2014 All Rights Reserved
+// </copyright>
+// <author>Dave Hamilton</author>
+
+using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
@@ -8,7 +13,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("Emulate.Core")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyCompany("Crankery")]
 [assembly: AssemblyProduct("Emulate.Core")]
 [assembly: AssemblyCopyright("Copyright ©  2014")]
 [assembly: AssemblyTrademark("")]

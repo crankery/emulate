@@ -1,7 +1,12 @@
-﻿using System;
+﻿// <copyright file="Registers.cs" company="Crankery">
+// Copyright (c) 2014 All Rights Reserved
+// </copyright>
+// <author>Dave Hamilton</author>
 
 namespace Crankery.Emulate.Core
 {
+    using System;
+
     /// <summary>
     /// Registers
     /// </summary>

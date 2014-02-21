@@ -1,6 +1,12 @@
-﻿using System;
+﻿// <copyright file="Intel8080.Call.cs" company="Crankery">
+// Copyright (c) 2014 All Rights Reserved
+// </copyright>
+// <author>Dave Hamilton</author>
+
 namespace Crankery.Emulate.Core
 {
+    using System;
+
     public partial class Intel8080
     {
         [Opcode(Instruction = 0xcd, Mnemonic = "CALL [a16]", Length = 3, Duration = 17)]
