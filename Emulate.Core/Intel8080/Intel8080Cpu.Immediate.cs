@@ -3,9 +3,9 @@
 // </copyright>
 // <author>Dave Hamilton</author>
 
-namespace Crankery.Emulate.Core
+namespace Crankery.Emulate.Core.Intel8080
 {
-    public partial  class Intel8080
+    public partial  class Intel8080Cpu
     {
         [Opcode(Instruction = 0x01, Mnemonic = "LD BC,[a16]", Length = 3, Duration = 10)]
         internal int LoadBC(byte[] instruction)

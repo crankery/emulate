@@ -3,9 +3,9 @@
 // </copyright>
 // <author>Dave Hamilton</author>
 
-namespace Crankery.Emulate.Core
+namespace Crankery.Emulate.Core.Intel8080
 {
-    public partial class Intel8080
+    public partial class Intel8080Cpu
     {
         [Opcode(Instruction = 0x76, Mnemonic = "HLT", Length = 1, Duration = 7)]
         internal int Halt(byte[] instruction)

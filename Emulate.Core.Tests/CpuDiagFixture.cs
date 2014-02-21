@@ -3,6 +3,7 @@
     using System.IO;
     using System.Reflection;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using Crankery.Emulate.Core.Intel8080;
     
     [TestClass]
     public class CpuDiagFixture
@@ -10,7 +11,7 @@
         [TestMethod]
         public void CpuDiagPasses()
         {
-            var cpu = new Intel8080(new Memory(), new MockDevices());
+            var cpu = new Intel8080Cpu(new Memory(), new MockDevices());
             var root = Path.GetDirectoryName(Assembly.GetExecutingAssembly().CodeBase).Replace(@"file:\", string.Empty);
             var lines = File.ReadAllLines(Path.Combine(root, "cpudiag.bin"));
             cpu.Memory.Load(File.ReadAllBytes("cpudiag.bin"), 0x100);

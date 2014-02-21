@@ -3,9 +3,9 @@
 // </copyright>
 // <author>Dave Hamilton</author>
 
-namespace Crankery.Emulate.Core
+namespace Crankery.Emulate.Core.Intel8080
 {
-    public partial class Intel8080
+    public partial class Intel8080Cpu
     {
         /// <summary>
         /// Complement the carry.

@@ -3,7 +3,7 @@
 // </copyright>
 // <author>Dave Hamilton</author>
 
-namespace Crankery.Emulate.Core
+namespace Crankery.Emulate.Core.Intel8080
 {
     using System;
     using System.Collections.Generic;
@@ -12,7 +12,7 @@ namespace Crankery.Emulate.Core
     using System.Reflection;
     using System.Text;
 
-    public partial class Intel8080
+    public partial class Intel8080Cpu
     {
         private readonly Dictionary<byte, Operation> operations;
         private readonly Registers registers;
@@ -22,7 +22,7 @@ namespace Crankery.Emulate.Core
         private bool isHalted;
         private List<string> log;
 
-        public Intel8080(IMemory memory, IDevices devices)
+        public Intel8080Cpu(IMemory memory, IDevices devices)
         {
             Memory = memory;
             Devices = devices;
@@ -261,7 +261,7 @@ namespace Crankery.Emulate.Core
 
         internal void BuildOperations()
         {
-            var methodInfos = typeof(Intel8080).GetMethods(BindingFlags.NonPublic | BindingFlags.Instance);
+            var methodInfos = typeof(Intel8080Cpu).GetMethods(BindingFlags.NonPublic | BindingFlags.Instance);
             foreach (var methodInfo in methodInfos)
             {
                 var opcodeAttributes = methodInfo.GetCustomAttributes(typeof(OpcodeAttribute));

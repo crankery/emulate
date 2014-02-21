@@ -3,9 +3,9 @@
 // </copyright>
 // <author>Dave Hamilton</author>
 
-namespace Crankery.Emulate.Core
+namespace Crankery.Emulate.Core.Intel8080
 {
-    public partial class Intel8080
+    public partial class Intel8080Cpu
     {
         [Opcode(Instruction = 0xc9, Mnemonic = "RET", Length = 1, Duration = 10)]
         //[Opcode(Instruction = 0xd9, Mnemonic = "*RET", Length = 1, Duration = 10)]

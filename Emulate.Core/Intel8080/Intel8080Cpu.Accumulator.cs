@@ -3,11 +3,11 @@
 // </copyright>
 // <author>Dave Hamilton</author>
 
-namespace Crankery.Emulate.Core
+namespace Crankery.Emulate.Core.Intel8080
 {
     using System;
 
-    public partial class Intel8080
+    public partial class Intel8080Cpu
     {
         [Opcode(Instruction = 0x80, Mnemonic = "ADD B", Length = 1, Duration = 4)]
         [Opcode(Instruction = 0x81, Mnemonic = "ADD C", Length = 1, Duration = 4)]

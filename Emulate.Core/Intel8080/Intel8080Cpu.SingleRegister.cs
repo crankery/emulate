@@ -3,11 +3,11 @@
 // </copyright>
 // <author>Dave Hamilton</author>
 
-using System;
-
-namespace Crankery.Emulate.Core
+namespace Crankery.Emulate.Core.Intel8080
 {
-    public partial class Intel8080
+    using System;
+
+    public partial class Intel8080Cpu
     {
         /// <summary>
         /// Increment a register.

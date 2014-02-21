@@ -3,9 +3,9 @@
 // </copyright>
 // <author>Dave Hamilton</author>
 
-namespace Crankery.Emulate.Core
+namespace Crankery.Emulate.Core.Intel8080
 {
-    public partial class Intel8080
+    public partial class Intel8080Cpu
     {
         [Opcode(Instruction = 0x03, Mnemonic = "INC BC", Length = 1, Duration = 6)]
         internal int IncrementBC(byte[] instruction)

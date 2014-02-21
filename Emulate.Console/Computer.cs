@@ -6,6 +6,7 @@ namespace Crankery.Emulate.Console
     using System.IO;
     using System.Threading;
     using Crankery.Emulate.Core;
+    using Crankery.Emulate.Core.Intel8080;
 
     public class Computer
     {
@@ -20,12 +21,12 @@ namespace Crankery.Emulate.Console
             var devices = new Devices();
             Memory = new Memory();
             Devices = devices;
-            Cpu = new Intel8080(Memory, Devices);
+            Cpu = new Intel8080Cpu(Memory, Devices);
 
             SerialInputOutput = new SerialInputOutput(devices, 0x10, 0x11);
         }
 
-        public Intel8080 Cpu { get; private set; }
+        public Intel8080Cpu Cpu { get; private set; }
 
         public IMemory Memory { get; private set; }
 
