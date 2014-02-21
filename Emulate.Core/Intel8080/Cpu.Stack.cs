@@ -1,11 +1,11 @@
-﻿// <copyright file="Intel8080.Stack.cs" company="Crankery">
+﻿// <copyright file="Cpu.Stack.cs" company="Crankery">
 // Copyright (c) 2014 All Rights Reserved
 // </copyright>
 // <author>Dave Hamilton</author>
 
 namespace Crankery.Emulate.Core.Intel8080
 {
-    public partial class Intel8080Cpu
+    public partial class Cpu
     {
         [Opcode(Instruction = 0xc5, Mnemonic = "PUSH BC", Length = 1, Duration = 11)]
         internal int PushBC(byte[] instruction)
@@ -34,7 +34,7 @@ namespace Crankery.Emulate.Core.Intel8080
         [Opcode(Instruction = 0xf5, Mnemonic = "PUSH AF", Length = 1, Duration = 11)]
         internal int PushAF(byte[] instruction)
         {
-            Push((ushort)(registers.A << 8 | flags.Combined));
+            Push((ushort)(registers.A << 8 | registers.Flags.Combined));
 
             return 0;
         }
@@ -67,7 +67,7 @@ namespace Crankery.Emulate.Core.Intel8080
         internal int PopAF(byte[] instruction)
         {
             var x = Pop();
-            flags.Combined = (byte)x;
+            registers.Flags.Combined = (byte)x;
             registers.A = (byte)(x >> 8);
 
             return 0;

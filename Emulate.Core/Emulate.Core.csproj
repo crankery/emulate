@@ -41,32 +41,35 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BinLoad.cs" />
+    <Compile Include="CircularBuffer.cs" />
+    <Compile Include="Intel8080\DebugLogEntry.cs" />
     <Compile Include="HexLoad.cs" />
+    <Compile Include="ICpu.cs" />
     <Compile Include="Memory.cs" />
     <Compile Include="Intel8080\InputPort.cs" />
     <Compile Include="Intel8080\OutputPort.cs" />
     <Compile Include="Intel8080\Port.cs" />
     <Compile Include="Utility.cs" />
-    <Compile Include="Intel8080\ByteParity.cs" />
+    <Compile Include="ByteParity.cs" />
     <Compile Include="Intel8080\Flags.cs" />
-    <Compile Include="Intel8080\Intel8080Cpu.Call.cs" />
-    <Compile Include="Intel8080\Intel8080Cpu.DataTransfer.cs" />
+    <Compile Include="Intel8080\Cpu.Call.cs" />
+    <Compile Include="Intel8080\Cpu.DataTransfer.cs" />
     <Compile Include="IDevices.cs" />
     <Compile Include="IMemory.cs" />
-    <Compile Include="Intel8080\Intel8080Cpu.CarryBit.cs" />
-    <Compile Include="Intel8080\Intel8080Cpu.cs" />
-    <Compile Include="Intel8080\Intel8080Cpu.DirectAddressing.cs" />
-    <Compile Include="Intel8080\Intel8080Cpu.Halt.cs" />
-    <Compile Include="Intel8080\Intel8080Cpu.Immediate.cs" />
-    <Compile Include="Intel8080\Intel8080Cpu.InputOutput.cs" />
-    <Compile Include="Intel8080\Intel8080Cpu.Interrupt.cs" />
-    <Compile Include="Intel8080\Intel8080Cpu.Jump.cs" />
-    <Compile Include="Intel8080\Intel8080Cpu.NoOp.cs" />
-    <Compile Include="Intel8080\Intel8080Cpu.RegisterPair.cs" />
-    <Compile Include="Intel8080\Intel8080Cpu.Stack.cs" />
-    <Compile Include="Intel8080\Intel8080Cpu.Return.cs" />
-    <Compile Include="Intel8080\Intel8080Cpu.RotateAccumulator.cs" />
-    <Compile Include="Intel8080\Intel8080Cpu.SingleRegister.cs" />
+    <Compile Include="Intel8080\Cpu.CarryBit.cs" />
+    <Compile Include="Intel8080\Cpu.cs" />
+    <Compile Include="Intel8080\Cpu.DirectAddressing.cs" />
+    <Compile Include="Intel8080\Cpu.Halt.cs" />
+    <Compile Include="Intel8080\Cpu.Immediate.cs" />
+    <Compile Include="Intel8080\Cpu.InputOutput.cs" />
+    <Compile Include="Intel8080\Cpu.Interrupt.cs" />
+    <Compile Include="Intel8080\Cpu.Jump.cs" />
+    <Compile Include="Intel8080\Cpu.NoOp.cs" />
+    <Compile Include="Intel8080\Cpu.RegisterPair.cs" />
+    <Compile Include="Intel8080\Cpu.Stack.cs" />
+    <Compile Include="Intel8080\Cpu.Return.cs" />
+    <Compile Include="Intel8080\Cpu.RotateAccumulator.cs" />
+    <Compile Include="Intel8080\Cpu.SingleRegister.cs" />
     <Compile Include="OpcodeAttribute.cs" />
     <Compile Include="Operation.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -75,7 +78,7 @@
     <Compile Include="Intel8080\Registers.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Intel8080\Intel8080Cpu.Accumulator.cs" />
+    <Compile Include="Intel8080\Cpu.Accumulator.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

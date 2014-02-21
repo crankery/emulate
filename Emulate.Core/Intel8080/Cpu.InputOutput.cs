@@ -1,11 +1,11 @@
-﻿// <copyright file="Intel8080.InputOutput.cs" company="Crankery">
+﻿// <copyright file="Cpu.InputOutput.cs" company="Crankery">
 // Copyright (c) 2014 All Rights Reserved
 // </copyright>
 // <author>Dave Hamilton</author>
 
 namespace Crankery.Emulate.Core.Intel8080
 {
-    public partial class Intel8080Cpu
+    public partial class Cpu
     {
         [Opcode(Instruction = 0xdb, Mnemonic = "IN [d8]", Length = 2, Duration = 10)]
         internal int In(byte[] instruction)

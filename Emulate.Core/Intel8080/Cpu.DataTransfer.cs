@@ -1,11 +1,11 @@
-﻿// <copyright file="Intel8080.DataTransfer.cs" company="Crankery">
+﻿// <copyright file="Cpu.DataTransfer.cs" company="Crankery">
 // Copyright (c) 2014 All Rights Reserved
 // </copyright>
 // <author>Dave Hamilton</author>
 
 namespace Crankery.Emulate.Core.Intel8080
 {
-    public partial class Intel8080Cpu
+    public partial class Cpu
     {
         /// <summary>
         /// Move a value from a register back onto itself.

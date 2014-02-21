@@ -1,11 +1,11 @@
-﻿// <copyright file="Intel8080.CarrryBit.cs" company="Crankery">
+﻿// <copyright file="Cpu.CarrryBit.cs" company="Crankery">
 // Copyright (c) 2014 All Rights Reserved
 // </copyright>
 // <author>Dave Hamilton</author>
 
 namespace Crankery.Emulate.Core.Intel8080
 {
-    public partial class Intel8080Cpu
+    public partial class Cpu
     {
         /// <summary>
         /// Complement the carry.
@@ -13,7 +13,7 @@ namespace Crankery.Emulate.Core.Intel8080
         [Opcode(Instruction = 0x3f, Mnemonic = "CMC", Length = 1, Duration = 4)]
         internal int ComplementCarry(byte[] instruction)
         {
-            flags.C = !flags.C;
+            registers.Flags.C = !registers.Flags.C;
 
             return 0;
         }
@@ -24,7 +24,7 @@ namespace Crankery.Emulate.Core.Intel8080
         [Opcode(Instruction = 0x37, Mnemonic = "STC", Length = 1, Duration = 4)]
         internal int SetCarry(byte[] instruction)
         {
-            flags.C = true;
+            registers.Flags.C = true;
 
             return 0;
         }

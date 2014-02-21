@@ -1,4 +1,4 @@
-﻿// <copyright file="Intel8080.SingleRegister.cs" company="Crankery">
+﻿// <copyright file="Cpu.SingleRegister.cs" company="Crankery">
 // Copyright (c) 2014 All Rights Reserved
 // </copyright>
 // <author>Dave Hamilton</author>
@@ -7,7 +7,7 @@ namespace Crankery.Emulate.Core.Intel8080
 {
     using System;
 
-    public partial class Intel8080Cpu
+    public partial class Cpu
     {
         /// <summary>
         /// Increment a register.
@@ -83,7 +83,7 @@ namespace Crankery.Emulate.Core.Intel8080
 
             var a = (int)registers.A;
             var l = a & 0xf;
-            if (l > 9 || flags.A)
+            if (l > 9 || registers.Flags.A)
             {
                 // the lower digit is A-F or the half carry is set
                 // add 6 to the value to adjust it to a decimal value [0-9]
@@ -94,7 +94,7 @@ namespace Crankery.Emulate.Core.Intel8080
             // the high order digit may only get adjusted if the lower digit did.
             // i can't really tell.
             var h = a >> 4;
-            if (h > 9 || flags.C || a > 0xff)
+            if (h > 9 || registers.Flags.C || a > 0xff)
             {
                 // add 6 to the upper digit if it's [A-F] or the carry is set or there was a half carry from the lower digit adjustment
                 h += 6;
@@ -104,8 +104,8 @@ namespace Crankery.Emulate.Core.Intel8080
             }
 
             registers.A = (byte)a;
-            flags.C = a > 0xff; // the carry is set if the adjustment produced an overflow
-            flags.A = false; // the half carry is always cleared here
+            registers.Flags.C = a > 0xff; // the carry is set if the adjustment produced an overflow
+            registers.Flags.A = false; // the half carry is always cleared here
 
             return 0;
         }
@@ -129,8 +129,8 @@ namespace Crankery.Emulate.Core.Intel8080
                 newValue = (byte)(oldValue - 1);
             }
 
-            flags.Update(newValue);
-            flags.A = (((1 ^ newValue) ^ oldValue) & 0x10) != 0;
+            registers.Flags.Update(newValue);
+            registers.Flags.A = (((1 ^ newValue) ^ oldValue) & 0x10) != 0;
 
             registers[register] = newValue;
         }

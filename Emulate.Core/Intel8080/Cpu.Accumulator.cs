@@ -1,4 +1,4 @@
-﻿// <copyright file="Intel8080.Accumulator.cs" company="Crankery">
+﻿// <copyright file="Cpu.Accumulator.cs" company="Crankery">
 // Copyright (c) 2014 All Rights Reserved
 // </copyright>
 // <author>Dave Hamilton</author>
@@ -7,7 +7,7 @@ namespace Crankery.Emulate.Core.Intel8080
 {
     using System;
 
-    public partial class Intel8080Cpu
+    public partial class Cpu
     {
         [Opcode(Instruction = 0x80, Mnemonic = "ADD B", Length = 1, Duration = 4)]
         [Opcode(Instruction = 0x81, Mnemonic = "ADD C", Length = 1, Duration = 4)]
@@ -160,9 +160,9 @@ namespace Crankery.Emulate.Core.Intel8080
         {
             var result = (byte)(a | b);
 
-            flags.Update(result);
-            flags.C = false;
-            flags.A = false;
+            registers.Flags.Update(result);
+            registers.Flags.C = false;
+            registers.Flags.A = false;
 
             return result;
         }
@@ -171,9 +171,9 @@ namespace Crankery.Emulate.Core.Intel8080
         {
             var result = (byte)(a ^ b);
 
-            flags.Update(result);
-            flags.C = false;
-            flags.A = false;
+            registers.Flags.Update(result);
+            registers.Flags.C = false;
+            registers.Flags.A = false;
 
             return result;
         }
@@ -182,35 +182,35 @@ namespace Crankery.Emulate.Core.Intel8080
         {
             var result = (byte)(a & b);
 
-            flags.Update(result);
-            flags.C = false;
-            flags.A = false;
+            registers.Flags.Update(result);
+            registers.Flags.C = false;
+            registers.Flags.A = false;
 
             return result;
         }
 
         private byte AddBytes(byte a, byte b, bool withCarry)
         {
-            var carry = (withCarry && flags.C ? 1 : 0);
+            var carry = (withCarry && registers.Flags.C ? 1 : 0);
             var result = a + b + carry;
             var final = (byte)result;
 
-            flags.Update((byte)result);
-            flags.C = result > 255;
-            flags.A = (((b ^ final) ^ a) & 0x10) != 0;
+            registers.Flags.Update((byte)result);
+            registers.Flags.C = result > 255;
+            registers.Flags.A = (((b ^ final) ^ a) & 0x10) != 0;
 
             return final;
         }
 
         public byte SubtractBytes(byte a, byte b, bool withBorrow)
         {
-            var borrow = (withBorrow && flags.C ? 1 : 0);
+            var borrow = (withBorrow && registers.Flags.C ? 1 : 0);
             var result = (a - b) - borrow;
             var final = (byte)result;
 
-            flags.Update(final);
-            flags.C = result < 0;
-            flags.A = (((b ^ final) ^ a) & 0x10) != 0;
+            registers.Flags.Update(final);
+            registers.Flags.C = result < 0;
+            registers.Flags.A = (((b ^ final) ^ a) & 0x10) != 0;
 
             return final;
         }

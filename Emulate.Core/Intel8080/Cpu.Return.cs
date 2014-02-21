@@ -1,11 +1,11 @@
-﻿// <copyright file="Intel8080.Return.cs" company="Crankery">
+﻿// <copyright file="Cpu.Return.cs" company="Crankery">
 // Copyright (c) 2014 All Rights Reserved
 // </copyright>
 // <author>Dave Hamilton</author>
 
 namespace Crankery.Emulate.Core.Intel8080
 {
-    public partial class Intel8080Cpu
+    public partial class Cpu
     {
         [Opcode(Instruction = 0xc9, Mnemonic = "RET", Length = 1, Duration = 10)]
         //[Opcode(Instruction = 0xd9, Mnemonic = "*RET", Length = 1, Duration = 10)]
@@ -26,14 +26,14 @@ namespace Crankery.Emulate.Core.Intel8080
         [Opcode(Instruction = 0xf8, Mnemonic = "RM", Length = 1, Duration = 5)]
         internal int ReturnConditional(byte[] instruction)
         {
-            if (instruction[0] == 0xc0 && !flags.Z ||
-                instruction[0] == 0xc8 && flags.Z ||
-                instruction[0] == 0xd0 && !flags.C ||
-                instruction[0] == 0xd8 && flags.C ||
-                instruction[0] == 0xe0 && !flags.P ||
-                instruction[0] == 0xe8 && flags.P ||
-                instruction[0] == 0xf0 && !flags.S ||
-                instruction[0] == 0xf8 && flags.S)
+            if (instruction[0] == 0xc0 && !registers.Flags.Z ||
+                instruction[0] == 0xc8 && registers.Flags.Z ||
+                instruction[0] == 0xd0 && !registers.Flags.C ||
+                instruction[0] == 0xd8 && registers.Flags.C ||
+                instruction[0] == 0xe0 && !registers.Flags.P ||
+                instruction[0] == 0xe8 && registers.Flags.P ||
+                instruction[0] == 0xf0 && !registers.Flags.S ||
+                instruction[0] == 0xf8 && registers.Flags.S)
             {
                 registers.ProgramCounter = Pop();
 

@@ -13,17 +13,30 @@ namespace Crankery.Emulate.Core.Intel8080
     public class Registers
     {
         private readonly IMemory memory;
-        private readonly Flags flags;
 
         /// <summary>
         /// Create registers.
         /// </summary>
         /// <param name="memory">A reference to the system's memory.</param>
-        /// <param name="flags">A reference to the CPU flags.</param>
-        public Registers(IMemory memory, Flags flags)
+        public Registers(IMemory memory)
         {
             this.memory = memory;
-            this.flags = flags; 
+            
+            Flags = new Flags(); 
+        }
+
+        public Registers(Registers registers)
+        {
+            Flags = new Flags(registers.Flags);
+            A = registers.A;
+            B = registers.B;
+            C = registers.C;
+            D = registers.D;
+            E = registers.E;
+            H = registers.H;
+            L = registers.L;
+            ProgramCounter = registers.ProgramCounter;
+            StackPointer = registers.StackPointer;
         }
 
         /// <summary>
@@ -60,6 +73,11 @@ namespace Crankery.Emulate.Core.Intel8080
         /// L register
         /// </summary>
         public byte L { get; set; }
+
+        /// <summary>
+        /// Flag registers.
+        /// </summary>
+        public Flags Flags { get; private set; }
 
         /// <summary>
         /// Program counter pseudo register
@@ -134,7 +152,7 @@ namespace Crankery.Emulate.Core.Intel8080
                     case RegisterPair.SP:
                         return StackPointer;
                     case RegisterPair.AF:
-                        return Utility.GetWord(A, flags.Combined);
+                        return Utility.GetWord(A, Flags.Combined);
                     default:
                         throw new ApplicationException("Unknown pair: " + pair);
                 }
@@ -158,7 +176,7 @@ namespace Crankery.Emulate.Core.Intel8080
                         break;
                     case RegisterPair.AF:
                         A = value.GetHigh();
-                        flags.Combined = value.GetLow();
+                        Flags.Combined = value.GetLow();
                         break;
                     default:
                         throw new ApplicationException("Unknown pair: " + pair);
@@ -230,6 +248,20 @@ namespace Crankery.Emulate.Core.Intel8080
                         throw new ApplicationException("Unknown register: " + register);
                 }
             }
+        }
+
+        public void Clear()
+        {
+            A = 0;
+            B = 0;
+            C = 0;
+            D = 0;
+            E = 0;
+            H = 0;
+            L = 0;
+            Flags.Clear();
+            ProgramCounter = 0;
+            StackPointer = 0;
         }
 
         private ushort GetCombined(Register h, Register l)

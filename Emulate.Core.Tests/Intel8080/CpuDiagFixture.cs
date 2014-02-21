@@ -1,4 +1,4 @@
-﻿namespace Crankery.Emulate.Core.Tests
+﻿namespace Crankery.Emulate.Core.Tests.Intel8080
 {
     using System.IO;
     using System.Reflection;
@@ -11,10 +11,9 @@
         [TestMethod]
         public void CpuDiagPasses()
         {
-            var cpu = new Intel8080Cpu(new Memory(), new MockDevices());
+            var cpu = new Cpu(new Memory(), new MockDevices());
             var root = Path.GetDirectoryName(Assembly.GetExecutingAssembly().CodeBase).Replace(@"file:\", string.Empty);
-            var lines = File.ReadAllLines(Path.Combine(root, "cpudiag.bin"));
-            cpu.Memory.Load(File.ReadAllBytes("cpudiag.bin"), 0x100);
+            cpu.Memory.Load(File.ReadAllBytes(@"Intel8080\cpudiag.bin"), 0x100);
 
             // this application's entry point is 0x100
             cpu.ProgramCounter = 0x100;

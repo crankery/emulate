@@ -1,11 +1,11 @@
-﻿// <copyright file="Intel8080.RegisterPair.cs" company="Crankery">
+﻿// <copyright file="Cpu.RegisterPair.cs" company="Crankery">
 // Copyright (c) 2014 All Rights Reserved
 // </copyright>
 // <author>Dave Hamilton</author>
 
 namespace Crankery.Emulate.Core.Intel8080
 {
-    public partial class Intel8080Cpu
+    public partial class Cpu
     {
         [Opcode(Instruction = 0x03, Mnemonic = "INC BC", Length = 1, Duration = 6)]
         internal int IncrementBC(byte[] instruction)
@@ -134,7 +134,7 @@ namespace Crankery.Emulate.Core.Intel8080
         private ushort AddWord(ushort a, ushort b)
         {
             var result = a + b;
-            flags.C = result > 0xffff;
+            registers.Flags.C = result > 0xffff;
 
             return (ushort)result;
         }

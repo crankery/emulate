@@ -10,6 +10,15 @@ namespace Crankery.Emulate.Core.Intel8080
     /// </summary>
     public class Flags
     {
+        public Flags()
+        {
+        }
+
+        public Flags(Flags flags)
+        {
+            Combined = flags.Combined;
+        }
+
         /// <summary>
         /// Zero
         /// </summary>

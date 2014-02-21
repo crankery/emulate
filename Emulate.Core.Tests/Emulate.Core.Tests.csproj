@@ -36,9 +36,10 @@
     <Reference Include="Microsoft.CSharp" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CpuDiagFixture.cs" />
-    <Compile Include="HelloWorldFixture.cs" />
-    <Compile Include="MockDevices.cs" />
+    <Compile Include="CircularBufferFixture.cs" />
+    <Compile Include="Intel8080\CpuDiagFixture.cs" />
+    <Compile Include="Intel8080\HelloWorldFixture.cs" />
+    <Compile Include="Intel8080\MockDevices.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -51,16 +52,16 @@
     <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="cpudiag.bin">
+    <None Include="Intel8080\cpudiag.bin">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="HelloWorld.hex">
+    <None Include="Intel8080\HelloWorld.hex">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="cpudiag.asm" />
-    <Content Include="cpudiag.txt" />
+    <Content Include="Intel8080\cpudiag.asm" />
+    <Content Include="Intel8080\cpudiag.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

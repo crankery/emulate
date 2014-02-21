@@ -4,7 +4,7 @@ using System;
 using System.IO;
 using System.Reflection;
 
-namespace Crankery.Emulate.Core.Tests
+namespace Crankery.Emulate.Core.Tests.Intel8080
 {
     [TestClass]
     public class HelloWorldFixture
@@ -13,9 +13,9 @@ namespace Crankery.Emulate.Core.Tests
         public void Run()
         {
             var devices = new MockDevices();
-            var machine = new Intel8080Cpu(new Memory(), devices);
+            var machine = new Cpu(new Memory(), devices);
             var root = Path.GetDirectoryName(Assembly.GetExecutingAssembly().CodeBase).Replace(@"file:\", string.Empty);
-            var lines = File.ReadAllLines(Path.Combine(root, "HelloWorld.hex"));
+            var lines = File.ReadAllLines(Path.Combine(root, @"Intel8080\HelloWorld.hex"));
             machine.Memory.Load(lines);
 
             while (!machine.IsHalted)

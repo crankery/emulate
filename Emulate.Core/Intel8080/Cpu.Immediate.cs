@@ -1,11 +1,11 @@
-﻿// <copyright file="Intel8080.Immediate.cs" company="Crankery">
+﻿// <copyright file="Cpu.Immediate.cs" company="Crankery">
 // Copyright (c) 2014 All Rights Reserved
 // </copyright>
 // <author>Dave Hamilton</author>
 
 namespace Crankery.Emulate.Core.Intel8080
 {
-    public partial  class Intel8080Cpu
+    public partial class Cpu
     {
         [Opcode(Instruction = 0x01, Mnemonic = "LD BC,[a16]", Length = 3, Duration = 10)]
         internal int LoadBC(byte[] instruction)

@@ -1,11 +1,11 @@
-﻿// <copyright file="Intel8080.Jump.cs" company="Crankery">
+﻿// <copyright file="Cpu.Jump.cs" company="Crankery">
 // Copyright (c) 2014 All Rights Reserved
 // </copyright>
 // <author>Dave Hamilton</author>
 
 namespace Crankery.Emulate.Core.Intel8080
 {
-    public partial class Intel8080Cpu
+    public partial class Cpu
     {
         /// <summary>
         /// PCHL or Jump to HL
@@ -41,14 +41,14 @@ namespace Crankery.Emulate.Core.Intel8080
         [Opcode(Instruction = 0xfa, Mnemonic = "JM [a16]", Length = 3, Duration = 10)]
         internal int JumpDirectConditional(byte[] instruction)
         {
-            if (instruction[0] == 0xc2 && !flags.Z ||
-                instruction[0] == 0xca && flags.Z ||
-                instruction[0] == 0xd2 && !flags.C ||
-                instruction[0] == 0xda && flags.C ||
-                instruction[0] == 0xe2 && !flags.P ||
-                instruction[0] == 0xea && flags.P ||
-                instruction[0] == 0xf2 && !flags.S ||
-                instruction[0] == 0xfa && flags.S)
+            if (instruction[0] == 0xc2 && !registers.Flags.Z ||
+                instruction[0] == 0xca && registers.Flags.Z ||
+                instruction[0] == 0xd2 && !registers.Flags.C ||
+                instruction[0] == 0xda && registers.Flags.C ||
+                instruction[0] == 0xe2 && !registers.Flags.P ||
+                instruction[0] == 0xea && registers.Flags.P ||
+                instruction[0] == 0xf2 && !registers.Flags.S ||
+                instruction[0] == 0xfa && registers.Flags.S)
             {
                 var address = (ushort)(instruction[2] << 8 | instruction[1]);
                 registers.ProgramCounter = address;

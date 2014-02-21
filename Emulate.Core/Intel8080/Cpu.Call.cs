@@ -1,4 +1,4 @@
-﻿// <copyright file="Intel8080.Call.cs" company="Crankery">
+﻿// <copyright file="Cpu.Call.cs" company="Crankery">
 // Copyright (c) 2014 All Rights Reserved
 // </copyright>
 // <author>Dave Hamilton</author>
@@ -7,7 +7,7 @@ namespace Crankery.Emulate.Core.Intel8080
 {
     using System;
 
-    public partial class Intel8080Cpu
+    public partial class Cpu
     {
         [Opcode(Instruction = 0xcd, Mnemonic = "CALL [a16]", Length = 3, Duration = 17)]
         //[Opcode(Instruction = 0xdd, Mnemonic = "*CALL [a16]", Length = 3, Duration = 17)]
@@ -33,14 +33,14 @@ namespace Crankery.Emulate.Core.Intel8080
         [Opcode(Instruction = 0xfc, Mnemonic = "CM [a16]", Length = 3, Duration = 11)]
         internal int CallConditional(byte[] instruction)
         {
-            if (instruction[0] == 0xc4 && !flags.Z ||
-                instruction[0] == 0xcc && flags.Z ||
-                instruction[0] == 0xd4 && !flags.C ||
-                instruction[0] == 0xdc && flags.C ||
-                instruction[0] == 0xe4 && !flags.P ||
-                instruction[0] == 0xec && flags.P ||
-                instruction[0] == 0xf4 && !flags.S ||
-                instruction[0] == 0xfc && flags.S)
+            if (instruction[0] == 0xc4 && !registers.Flags.Z ||
+                instruction[0] == 0xcc && registers.Flags.Z ||
+                instruction[0] == 0xd4 && !registers.Flags.C ||
+                instruction[0] == 0xdc && registers.Flags.C ||
+                instruction[0] == 0xe4 && !registers.Flags.P ||
+                instruction[0] == 0xec && registers.Flags.P ||
+                instruction[0] == 0xf4 && !registers.Flags.S ||
+                instruction[0] == 0xfc && registers.Flags.S)
             {
                 Push(registers.ProgramCounter);
                 

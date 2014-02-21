@@ -21,12 +21,12 @@ namespace Crankery.Emulate.Console
             var devices = new Devices();
             Memory = new Memory();
             Devices = devices;
-            Cpu = new Intel8080Cpu(Memory, Devices);
+            Cpu = new Cpu(Memory, Devices);
 
             SerialInputOutput = new SerialInputOutput(devices, 0x10, 0x11);
         }
 
-        public Intel8080Cpu Cpu { get; private set; }
+        public Cpu Cpu { get; private set; }
 
         public IMemory Memory { get; private set; }
 

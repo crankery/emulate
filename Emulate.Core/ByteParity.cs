@@ -3,20 +3,19 @@
 // </copyright>
 // <author>Dave Hamilton</author>
 
-namespace Crankery.Emulate.Core.Intel8080
+namespace Crankery.Emulate.Core
 {
     public static class ByteParity
     {
-        // table of counts of '1' bits by index
-        private static readonly int[] table;
+        private static readonly bool[] isEven;
 
         static ByteParity()
         {
-            table = new int[256];
+            isEven = new bool[256];
 
             for (int i = 0; i < 256; i++)
             {
-                table[i] = (byte)(
+                isEven[i] = (
                   ((i & 0x01) != 0 ? 1 : 0) +
                   ((i & 0x02) != 0 ? 1 : 0) +
                   ((i & 0x04) != 0 ? 1 : 0) +
@@ -24,7 +23,7 @@ namespace Crankery.Emulate.Core.Intel8080
                   ((i & 0x10) != 0 ? 1 : 0) +
                   ((i & 0x20) != 0 ? 1 : 0) +
                   ((i & 0x40) != 0 ? 1 : 0) +
-                  ((i & 0x80) != 0 ? 1 : 0));
+                  ((i & 0x80) != 0 ? 1 : 0)) % 2 == 0;
             }
         }
 
@@ -35,7 +34,7 @@ namespace Crankery.Emulate.Core.Intel8080
         /// <returns>True on even parity.</returns>
         public static bool EvenParity(this byte v)
         {
-            return table[(int)v] % 2 == 0;
+            return isEven[(int)v];
         }
     }
 }

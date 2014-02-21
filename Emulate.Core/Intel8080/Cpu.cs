@@ -1,4 +1,4 @@
-﻿// <copyright file="Intel8080.cs" company="Crankery">
+﻿// <copyright file="Cpu.cs" company="Crankery">
 // Copyright (c) 2014 All Rights Reserved
 // </copyright>
 // <author>Dave Hamilton</author>
@@ -12,24 +12,25 @@ namespace Crankery.Emulate.Core.Intel8080
     using System.Reflection;
     using System.Text;
 
-    public partial class Intel8080Cpu
+    /// <summary>
+    /// The main implmentation of the i8080 CPU.
+    /// </summary>
+    public partial class Cpu : ICpu
     {
         private readonly Dictionary<byte, Operation> operations;
         private readonly Registers registers;
-        private readonly Flags flags;
         private readonly byte[] fetch;
         private bool interruptEnable;
         private bool isHalted;
-        private List<string> log;
+        private CircularBuffer<DebugLogEntry> log;
 
-        public Intel8080Cpu(IMemory memory, IDevices devices)
+        public Cpu(IMemory memory, IDevices devices)
         {
             Memory = memory;
             Devices = devices;
 
             operations = new Dictionary<byte, Operation>();
-            flags = new Flags();
-            registers = new Registers(memory, flags);
+            registers = new Registers(memory);
 
             BuildOperations();
             Reset();
@@ -49,12 +50,6 @@ namespace Crankery.Emulate.Core.Intel8080
                 if (value != isHalted)
                 {
                     isHalted = value;
-
-                    if (Debug)
-                    {
-                        Trace.WriteLine(
-                            string.Format("-- HALT --"));
-                    }
                 }
             }
         }
@@ -68,7 +63,14 @@ namespace Crankery.Emulate.Core.Intel8080
 
             set
             {
-                log = new List<string>();
+                if (value)
+                {
+                    log = new CircularBuffer<DebugLogEntry>(100);
+                }
+                else
+                {
+                    log = null;
+                }
             }
         }
 
@@ -76,7 +78,10 @@ namespace Crankery.Emulate.Core.Intel8080
         {
             get
             {
-                return log ?? Enumerable.Empty<string>();
+                return
+                    log == null ? 
+                    Enumerable.Empty<string>() :
+                    log.Values.Select(x => x.ToString());
             }
         }
 
@@ -101,18 +106,15 @@ namespace Crankery.Emulate.Core.Intel8080
 
         public void Reset()
         {
-            // the only documented effect of reset is to set the pc to 0.
-            registers.ProgramCounter = 0;
+            // the only documented effect of reset is to set the pc to 0
+            // we'll clear the entire Registers instance.
+            registers.Clear();
 
             // you'd think it'd bring it out of halt though
             IsHalted = false;
 
             // And interrupts are probably enabled again.
             interruptEnable = true;
-
-            // here's some sensible things to reset although they're not necessary.
-            flags.Clear();
-            registers.StackPointer = 0;
 
             // and restart time.
             Cycle = 0;
@@ -152,7 +154,7 @@ namespace Crankery.Emulate.Core.Intel8080
         /// <returns>How long the instruction took in cycles.</returns>
         public int Step()
         {
-            var result = 0;
+            var cycles = 0;
             
             // don't do anyting if we're halted.
             if (!IsHalted)
@@ -161,7 +163,7 @@ namespace Crankery.Emulate.Core.Intel8080
                 fetch[0] = Memory.Read(registers.ProgramCounter++);
                 var operation = GetOperation(fetch[0]);
 
-                // grab any operands for the instruction
+                // grab any operands for the instruction (max two so no need for a loop)
                 if (operation.Opcode.Length > 1)
                 {
                     fetch[1] = Memory.Read(registers.ProgramCounter++);
@@ -172,63 +174,16 @@ namespace Crankery.Emulate.Core.Intel8080
                     fetch[2] = Memory.Read(registers.ProgramCounter++);
                 }
 
-                result = ExecuteOperation(operation, fetch);
+                // execute the operation
+                cycles = ExecuteOperation(operation, fetch);
 
                 if (Debug)
                 {
-                    WriteDebug(operation);
+                    log.Submit(new DebugLogEntry(operation.Opcode, fetch, registers));
                 }
             }
 
-            return result;
-        }
-
-        private void WriteDebug(Operation operation)
-        {
-            var tracer = new StringBuilder();
-
-            // the PC has already been advanced to the next instruction
-            tracer.AppendFormat(
-                "{0:x4}: {1:x2} {2} {3}",
-                registers.ProgramCounter - operation.Opcode.Length,
-                fetch[0],
-                operation.Opcode.Length > 1 ? fetch[1].ToString("x2") : "  ",
-                operation.Opcode.Length > 2 ? fetch[2].ToString("x2") : "  ");
-
-            // fix up the mnemonic to have display immediate constant values
-            var m = operation.Opcode.Mnemonic;
-            if (m.Contains("[a16]"))
-            {
-                m = m.Replace("[a16]", string.Format("${1:x2}{0:x2}", fetch[1], fetch[2]));
-
-            }
-            else if (m.Contains("[d8]"))
-            {
-                m = m.Replace("[d8]", string.Format("${0:x2}", fetch[1]));
-            }
-
-            tracer.AppendFormat(
-                " {0,-20} | bc={1:x2}{2:x2} de={3:x2}{4:x2} hl={5:x2}{6:x2} a={7:x2} sp={8:x4} {9}{10}{11}{12}{13}",
-                m.ToLower(),
-                registers.B,
-                registers.C,
-                registers.D,
-                registers.E,
-                registers.H,
-                registers.L,
-                registers.A,
-                registers.StackPointer,
-                flags.S ? 'S' : '-',
-                flags.Z ? 'Z' : '-',
-                flags.A ? 'A' : '-',
-                flags.P ? 'P' : '-',
-                flags.C ? 'C' : '-');
-
-            log.Add(tracer.ToString());
-            if (log.Count > 100)
-            {
-                log.RemoveAt(0);
-            }
+            return cycles;
         }
 
         internal Operation GetOperation(byte opcode)
@@ -252,16 +207,16 @@ namespace Crankery.Emulate.Core.Intel8080
             var extraCycles = operation.Execute(instruction);
 
             // update our cycle count
-            var duration = operation.Opcode.Duration + extraCycles;
+            var cycles = operation.Opcode.Duration + extraCycles;
 
-            Cycle += (ulong)duration;
+            Cycle += (ulong)cycles;
 
-            return duration;
+            return cycles;
         }
 
         internal void BuildOperations()
         {
-            var methodInfos = typeof(Intel8080Cpu).GetMethods(BindingFlags.NonPublic | BindingFlags.Instance);
+            var methodInfos = typeof(Cpu).GetMethods(BindingFlags.NonPublic | BindingFlags.Instance);
             foreach (var methodInfo in methodInfos)
             {
                 var opcodeAttributes = methodInfo.GetCustomAttributes(typeof(OpcodeAttribute));
