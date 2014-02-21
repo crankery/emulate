@@ -4,14 +4,14 @@
     using System;
 
     [Flags]
-    private enum DriveStatus
+    public enum DriveStatus
     {
         ReadyToWrite = 1 << 0,
         HeadMovementOk = 1 << 1,
         ReadyForReadWrite = 1 << 2,
         InterruptsEnabled = 1 << 3,
         Track0 = 1 << 6,
-        ReadyToWrite = 1 << 7
+        ReadyToWriteX = 1 << 7
     }
 
     public class Disk
