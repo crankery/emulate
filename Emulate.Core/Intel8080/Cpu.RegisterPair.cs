@@ -8,69 +8,30 @@ namespace Crankery.Emulate.Core.Intel8080
     public partial class Cpu
     {
         [Opcode(Instruction = 0x03, Mnemonic = "INC BC", Length = 1, Duration = 6)]
-        internal int IncrementBC(byte[] instruction)
-        {
-            registers.BC = (ushort)(registers.BC + 1);
-
-            return 0;
-        }
-
         [Opcode(Instruction = 0x13, Mnemonic = "INC DE", Length = 1, Duration = 6)]
-        internal int IncrementDE(byte[] instruction)
-        {
-            registers.DE = (ushort)(registers.DE + 1);
-
-            return 0;
-        }
-
         [Opcode(Instruction = 0x23, Mnemonic = "INC HL", Length = 1, Duration = 6)]
-        internal int IncrementHL(byte[] instruction)
-        {
-            registers.HL = (ushort)(registers.HL + 1);
-
-            return 0;
-        }
-
         [Opcode(Instruction = 0x33, Mnemonic = "INC SP", Length = 1, Duration = 6)]
-        internal int IncrementSP(byte[] instruction)
+        internal int IncrementRegisterPair(byte[] instruction)
         {
-            registers.StackPointer = (ushort)(registers.StackPointer + 1);
+            var pair = (RegisterPair)((instruction[0] >> 4) & 3);
+
+            registers[pair] = (ushort)(registers[pair] + 1);
 
             return 0;
         }
 
         [Opcode(Instruction = 0x0b, Mnemonic = "DEC BC", Length = 1, Duration = 5)]
-        internal int DecrementBC(byte[] instruction)
-        {
-            registers.BC = (ushort)(registers.BC - 1);
-
-            return 0;
-        }
-
         [Opcode(Instruction = 0x1b, Mnemonic = "DEC DE", Length = 1, Duration = 5)]
-        internal int DecrementDE(byte[] instruction)
-        {
-            registers.DE = (ushort)(registers.DE - 1);
-
-            return 0;
-        }
-
         [Opcode(Instruction = 0x2b, Mnemonic = "DEC HL", Length = 1, Duration = 5)]
-        internal int DecrementHL(byte[] instruction)
-        {
-            registers.HL = (ushort)(registers.HL - 1);
-
-            return 0;
-        }
-
         [Opcode(Instruction = 0x3b, Mnemonic = "DEC SP", Length = 1, Duration = 5)]
-        internal int DecrementSP(byte[] instruction)
+        internal int DecrementRegisterPair(byte[] instruction)
         {
-            registers.StackPointer = (ushort)(registers.StackPointer - 1);
+            var pair = (RegisterPair)((instruction[0] >> 4) & 3);
+
+            registers[pair] = (ushort)(registers[pair] - 1);
 
             return 0;
         }
-
         [Opcode(Instruction = 0x09, Mnemonic = "DAD BC", Length = 1, Duration = 11)]
         internal int DoubleAddBC(byte[] instruction)
         {

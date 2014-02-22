@@ -42,9 +42,10 @@
   <ItemGroup>
     <Compile Include="BinLoad.cs" />
     <Compile Include="CircularBuffer.cs" />
-    <Compile Include="Intel8080\DebugLogEntry.cs" />
+    <Compile Include="Intel8080\State.cs" />
     <Compile Include="HexLoad.cs" />
     <Compile Include="ICpu.cs" />
+    <Compile Include="Intel8080\Flag.cs" />
     <Compile Include="Memory.cs" />
     <Compile Include="Intel8080\InputPort.cs" />
     <Compile Include="Intel8080\OutputPort.cs" />

@@ -10,7 +10,7 @@ namespace Crankery.Emulate.Core.Tests.Intel8080
     public class HelloWorldFixture
     {
         [TestMethod]
-        public void Run()
+        public void HelloWorldSaysHi()
         {
             var devices = new MockDevices();
             var machine = new Cpu(new Memory(), devices);

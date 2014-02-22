@@ -5,6 +5,8 @@
 
 namespace Crankery.Emulate.Core.Intel8080
 {
+    using System;
+
     /// <summary>
     /// Condition codes (bits)
     /// </summary>
@@ -67,6 +69,54 @@ namespace Crankery.Emulate.Core.Intel8080
                 A = (value & 16) != 0;
                 P = (value & 4) != 0;
                 C = (value & 1) != 0;
+            }
+        }
+
+        public bool this[Flag flag]
+        {
+            get
+            {
+                switch (flag)
+                {
+                    case Flag.Z:
+                        return Z;
+
+                    case Flag.C:
+                        return C;
+
+                    case Flag.P:
+                        return P;
+
+                    case Flag.S:
+                        return S;
+                }
+
+                throw new NotImplementedException();
+            }
+
+            set
+            {
+                switch (flag)
+                {
+                    case Flag.Z:
+                        Z = value;
+                        break;
+
+                    case Flag.C:
+                        C = value;
+                        break;
+
+                    case Flag.P:
+                        P = value;
+                        break;
+
+                    case Flag.S:
+                        S = value;
+                        break;
+
+                    default:
+                        throw new NotImplementedException();
+                }
             }
         }
 

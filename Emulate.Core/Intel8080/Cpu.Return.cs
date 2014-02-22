@@ -26,14 +26,12 @@ namespace Crankery.Emulate.Core.Intel8080
         [Opcode(Instruction = 0xf8, Mnemonic = "RM", Length = 1, Duration = 5)]
         internal int ReturnConditional(byte[] instruction)
         {
-            if (instruction[0] == 0xc0 && !registers.Flags.Z ||
-                instruction[0] == 0xc8 && registers.Flags.Z ||
-                instruction[0] == 0xd0 && !registers.Flags.C ||
-                instruction[0] == 0xd8 && registers.Flags.C ||
-                instruction[0] == 0xe0 && !registers.Flags.P ||
-                instruction[0] == 0xe8 && registers.Flags.P ||
-                instruction[0] == 0xf0 && !registers.Flags.S ||
-                instruction[0] == 0xf8 && registers.Flags.S)
+            // instruction encodes the flag from 0..3 in bits 4 & 5
+            // instruction encodes the test (true or false) in bit 3.
+            var flag = (Flag)((instruction[0] >> 4) & 3);
+            var test = (instruction[0] & 8) == 0 ? false : true;
+
+            if (registers.Flags[flag] == test)
             {
                 registers.ProgramCounter = Pop();
 

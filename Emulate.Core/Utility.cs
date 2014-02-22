@@ -3,6 +3,7 @@
 // </copyright>
 // <author>Dave Hamilton</author>
 
+using System;
 namespace Crankery.Emulate.Core
 {
     public static class Utility
@@ -23,9 +24,9 @@ namespace Crankery.Emulate.Core
             return (byte)w;
         }
 
-        public static ushort GetWord(byte h, byte l)
+        public static ushort MakeWord(byte h, byte l)
         {
             return (ushort)((int)h << 8 | (int)l);
         }
-    }
+   }
 }

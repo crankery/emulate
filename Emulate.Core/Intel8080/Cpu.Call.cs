@@ -15,7 +15,7 @@ namespace Crankery.Emulate.Core.Intel8080
         //[Opcode(Instruction = 0xfd, Mnemonic = "*CALL [a16]", Length = 3, Duration = 17)]
         internal int CallUnconditional(byte[] instruction)
         {
-            var address = (ushort)(instruction[2] << 8 | instruction[1]);
+            var address = Utility.MakeWord(instruction[2], instruction[1]);
 
             Push(registers.ProgramCounter);
             registers.ProgramCounter = address;
@@ -33,18 +33,16 @@ namespace Crankery.Emulate.Core.Intel8080
         [Opcode(Instruction = 0xfc, Mnemonic = "CM [a16]", Length = 3, Duration = 11)]
         internal int CallConditional(byte[] instruction)
         {
-            if (instruction[0] == 0xc4 && !registers.Flags.Z ||
-                instruction[0] == 0xcc && registers.Flags.Z ||
-                instruction[0] == 0xd4 && !registers.Flags.C ||
-                instruction[0] == 0xdc && registers.Flags.C ||
-                instruction[0] == 0xe4 && !registers.Flags.P ||
-                instruction[0] == 0xec && registers.Flags.P ||
-                instruction[0] == 0xf4 && !registers.Flags.S ||
-                instruction[0] == 0xfc && registers.Flags.S)
+            // instruction encodes the flag from 0..3 in bits 4 & 5
+            // instruction encodes the test (true or false) in bit 3.
+            var flag = (Flag)((instruction[0] >> 4) & 3);
+            var test = (instruction[0] & 8) == 0 ? false : true;
+
+            if (registers.Flags[flag] == test)
             {
                 Push(registers.ProgramCounter);
-                
-                var address = (ushort)(instruction[2] << 8 | instruction[1]);
+
+                var address = Utility.MakeWord(instruction[2], instruction[1]);
                 registers.ProgramCounter = address;
 
                 // if we successfully evaluated a condition, it took 7 more cycles.

@@ -7,10 +7,8 @@ namespace Crankery.Emulate.Core.Intel8080
 {
     using System;
     using System.Collections.Generic;
-    using System.Diagnostics;
     using System.Linq;
     using System.Reflection;
-    using System.Text;
 
     /// <summary>
     /// The main implmentation of the i8080 CPU.
@@ -22,7 +20,7 @@ namespace Crankery.Emulate.Core.Intel8080
         private readonly byte[] fetch;
         private bool interruptEnable;
         private bool isHalted;
-        private CircularBuffer<DebugLogEntry> log;
+        private CircularBuffer<State> log;
 
         public Cpu(IMemory memory, IDevices devices)
         {
@@ -65,7 +63,7 @@ namespace Crankery.Emulate.Core.Intel8080
             {
                 if (value)
                 {
-                    log = new CircularBuffer<DebugLogEntry>(100);
+                    log = new CircularBuffer<State>(100);
                 }
                 else
                 {
@@ -166,11 +164,13 @@ namespace Crankery.Emulate.Core.Intel8080
                 // grab any operands for the instruction (max two so no need for a loop)
                 if (operation.Opcode.Length > 1)
                 {
+                    // TODO: make this behave properly if we're executing an instruction at end of address space
                     fetch[1] = Memory.Read(registers.ProgramCounter++);
                 }
 
                 if (operation.Opcode.Length > 2)
                 {
+                    // TODO: make this behave properly if we're executing an instruction at end of address space
                     fetch[2] = Memory.Read(registers.ProgramCounter++);
                 }
 
@@ -179,7 +179,7 @@ namespace Crankery.Emulate.Core.Intel8080
 
                 if (Debug)
                 {
-                    log.Submit(new DebugLogEntry(operation.Opcode, fetch, registers));
+                    log.Submit(new State(operation.Opcode, fetch, registers));
                 }
             }
 

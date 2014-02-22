@@ -23,7 +23,7 @@ namespace Crankery.Emulate.Core
 
         public ushort ReadWord(ushort address)
         {
-            return (ushort)((int)ram[address] + ((int)ram[address + 1] << 8));
+            return Utility.MakeWord(ram[address + 1], ram[address]);
         }
 
         public void Write(ushort address, byte value)
@@ -33,8 +33,8 @@ namespace Crankery.Emulate.Core
 
         public void Write(ushort address, ushort value)
         {
-            ram[address] = (byte)(value & 0xff);
-            ram[address + 1] = (byte)(value >> 8);
+            ram[address] = value.GetLow();
+            ram[address + 1] = value.GetHigh();
         }
     }
 }

@@ -8,37 +8,17 @@ namespace Crankery.Emulate.Core.Intel8080
     public partial class Cpu
     {
         [Opcode(Instruction = 0x01, Mnemonic = "LD BC,[a16]", Length = 3, Duration = 10)]
-        internal int LoadBC(byte[] instruction)
-        {
-            registers.BC = Utility.GetWord(instruction[2], instruction[1]);
-
-            return 0;
-        }
-
         [Opcode(Instruction = 0x11, Mnemonic = "LD DE,[a16]", Length = 3, Duration = 10)]
-        internal int LoadDE(byte[] instruction)
-        {
-            registers.DE = Utility.GetWord(instruction[2], instruction[1]);
-
-            return 0;
-        }
-
         [Opcode(Instruction = 0x21, Mnemonic = "LD HL,[a16]", Length = 3, Duration = 10)]
-        internal int LoadHL(byte[] instruction)
-        {
-            registers.HL = Utility.GetWord(instruction[2], instruction[1]);
-
-            return 0;
-        }
-
         [Opcode(Instruction = 0x31, Mnemonic = "LD SP,[a16]", Length = 3, Duration = 10)]
-        internal int LoadSP(byte[] instruction)
+        internal int LoadRegisterPair(byte[] instruction)
         {
-            registers.StackPointer = Utility.GetWord(instruction[2], instruction[1]);
+            var pair = (RegisterPair)((instruction[0] >> 4) & 3);
+
+            registers[pair] = Utility.MakeWord(instruction[2], instruction[1]);
 
             return 0;
         }
-
         [Opcode(Instruction = 0x06, Mnemonic = "MVI B,[d8]", Length = 2, Duration = 4)]
         [Opcode(Instruction = 0x0e, Mnemonic = "MVI C,[d8]", Length = 2, Duration = 4)]
         [Opcode(Instruction = 0x16, Mnemonic = "MVI D,[d8]", Length = 2, Duration = 4)]

@@ -22,7 +22,7 @@ namespace Crankery.Emulate.Core.Intel8080
         //[Opcode(Instruction = 0xc3, Mnemonic = "*JMP [a16]", Length = 3, Duration = 10)]
         internal int JumpDirectUnconditional(byte[] instruction)
         {
-            var address = (ushort)(instruction[2] << 8 | instruction[1]);
+            var address = Utility.MakeWord(instruction[2], instruction[1]);
             registers.ProgramCounter = address;
 
             return 0;
@@ -41,16 +41,14 @@ namespace Crankery.Emulate.Core.Intel8080
         [Opcode(Instruction = 0xfa, Mnemonic = "JM [a16]", Length = 3, Duration = 10)]
         internal int JumpDirectConditional(byte[] instruction)
         {
-            if (instruction[0] == 0xc2 && !registers.Flags.Z ||
-                instruction[0] == 0xca && registers.Flags.Z ||
-                instruction[0] == 0xd2 && !registers.Flags.C ||
-                instruction[0] == 0xda && registers.Flags.C ||
-                instruction[0] == 0xe2 && !registers.Flags.P ||
-                instruction[0] == 0xea && registers.Flags.P ||
-                instruction[0] == 0xf2 && !registers.Flags.S ||
-                instruction[0] == 0xfa && registers.Flags.S)
+            // instruction encodes the flag from 0..3 in bits 4 & 5
+            // instruction encodes the test (true or false) in bit 3.
+            var flag = (Flag)((instruction[0] >> 4) & 3);
+            var test = (instruction[0] & 8) == 0 ? false : true;
+
+            if (registers.Flags[flag] == test)
             {
-                var address = (ushort)(instruction[2] << 8 | instruction[1]);
+                var address = Utility.MakeWord(instruction[2], instruction[1]);
                 registers.ProgramCounter = address;
 
                 // if we successfully evaluated a condition, it took 5 more cycles.

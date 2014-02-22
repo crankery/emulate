@@ -34,7 +34,7 @@ namespace Crankery.Emulate.Core.Intel8080
         [Opcode(Instruction = 0xf5, Mnemonic = "PUSH AF", Length = 1, Duration = 11)]
         internal int PushAF(byte[] instruction)
         {
-            Push((ushort)(registers.A << 8 | registers.Flags.Combined));
+            Push(Utility.MakeWord(registers.A, registers.Flags.Combined));
 
             return 0;
         }

@@ -10,7 +10,7 @@ namespace Crankery.Emulate.Core.Intel8080
         BC,
         DE,
         HL,
-        AF, // accumulator/flags
-        SP // stack pointer
+        SP, // stack pointer
+        AF // accumulator/flags
     }
 }

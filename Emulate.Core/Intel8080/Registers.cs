@@ -152,7 +152,7 @@ namespace Crankery.Emulate.Core.Intel8080
                     case RegisterPair.SP:
                         return StackPointer;
                     case RegisterPair.AF:
-                        return Utility.GetWord(A, Flags.Combined);
+                        return Utility.MakeWord(A, Flags.Combined);
                     default:
                         throw new ApplicationException("Unknown pair: " + pair);
                 }
@@ -266,7 +266,7 @@ namespace Crankery.Emulate.Core.Intel8080
 
         private ushort GetCombined(Register h, Register l)
         {
-            return Utility.GetWord(this[h], this[l]);
+            return Utility.MakeWord(this[h], this[l]);
         }
 
         private void SetCombined(ushort value, Register h, Register l)
