@@ -1,8 +1,9 @@
 ﻿namespace Crankery.Emulate.Core
 {
+    using Crankery.Emulate.Core.Intel8080;
     using System;
-using System.Collections.Generic;
-using System.Diagnostics;
+    using System.Collections.Generic;
+    using System.Diagnostics;
 
     public class Devices : IDevices
     {

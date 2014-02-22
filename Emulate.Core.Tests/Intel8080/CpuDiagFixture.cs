@@ -14,7 +14,7 @@
             var cpu = new Cpu(new Memory(), new MockDevices());
             var root = Path.GetDirectoryName(Assembly.GetExecutingAssembly().CodeBase).Replace(@"file:\", string.Empty);
             cpu.Memory.Load(File.ReadAllBytes(@"Intel8080\cpudiag.bin"), 0x100);
-
+            
             // this application's entry point is 0x100
             cpu.ProgramCounter = 0x100;
             cpu.Debug = true;

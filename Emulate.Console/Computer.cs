@@ -1,12 +1,12 @@
 ﻿
 namespace Crankery.Emulate.Console
 {
+    using Crankery.Emulate.Core;
+    using Crankery.Emulate.Core.Intel8080;
     using System;
     using System.Diagnostics;
     using System.IO;
     using System.Threading;
-    using Crankery.Emulate.Core;
-    using Crankery.Emulate.Core.Intel8080;
 
     public class Computer
     {

@@ -1,13 +1,10 @@
-﻿using Crankery.Emulate.Core;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
-
-namespace Crankery.Emulate.Console
+﻿namespace Crankery.Emulate.Console
 {
+    using Crankery.Emulate.Core;
+    using System;
+    using System.Collections.Generic;
+    using System.Threading;
+
     public class SerialInputOutput
     {
         private Queue<byte> data = new Queue<byte>();

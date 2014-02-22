@@ -54,7 +54,7 @@
     <Compile Include="Intel8080\Flags.cs" />
     <Compile Include="Intel8080\Cpu.Call.cs" />
     <Compile Include="Intel8080\Cpu.DataTransfer.cs" />
-    <Compile Include="IDevices.cs" />
+    <Compile Include="Intel8080\IDevices.cs" />
     <Compile Include="IMemory.cs" />
     <Compile Include="Intel8080\Cpu.CarryBit.cs" />
     <Compile Include="Intel8080\Cpu.cs" />

@@ -7,9 +7,8 @@ namespace Crankery.Emulate.Core
 {
     public static class BinLoad
     {
-        public static void Load(this IMemory memory, byte[] bytes, ushort baseAddress)
+        public static void Load(this IMemory memory, byte[] bytes, ushort address)
         {
-            var address = baseAddress;
             for (int i = 0; i < bytes.Length; i++)
             {
                 memory.Write(address++, bytes[i]);

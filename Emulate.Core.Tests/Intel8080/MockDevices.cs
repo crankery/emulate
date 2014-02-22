@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Crankery.Emulate.Core.Intel8080;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
