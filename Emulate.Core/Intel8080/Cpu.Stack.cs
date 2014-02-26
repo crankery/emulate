@@ -67,8 +67,8 @@ namespace Crankery.Emulate.Core.Intel8080
         internal int PopAF(byte[] instruction)
         {
             var x = Pop();
-            registers.Flags.Combined = (byte)x;
-            registers.A = (byte)(x >> 8);
+            registers.Flags.Combined = x.GetLow();
+            registers.A = x.GetHigh();
 
             return 0;
         }

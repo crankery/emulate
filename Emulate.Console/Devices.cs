@@ -1,4 +1,4 @@
-﻿namespace Crankery.Emulate.Core
+﻿namespace Crankery.Emulate.Console
 {
     using Crankery.Emulate.Core.Intel8080;
     using System;

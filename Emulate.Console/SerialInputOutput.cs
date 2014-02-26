@@ -1,25 +1,35 @@
 ﻿namespace Crankery.Emulate.Console
 {
-    using Crankery.Emulate.Core;
     using System;
     using System.Collections.Generic;
     using System.Threading;
 
+    /// <summary>
+    /// A MITS SIO2 card with two serial ports.
+    /// The first serial port is the local terminal device (keyboard and display)
+    /// The second isn't connected to anything (would normally be a printer).
+    /// This occupies ports 0x10-0x13 by default.
+    /// </summary>
     public class SerialInputOutput
     {
-        private Queue<byte> data = new Queue<byte>();
-        private ManualResetEvent stop;
-        private Thread bgThread;
+        private readonly Queue<byte> data = new Queue<byte>();
+        
+        public delegate void SendByte(object sender, byte b);
+
+        /// <summary>
+        /// Send a character to the terminal's display.
+        /// </summary>
+        public event SendByte Send = delegate { };
 
         public SerialInputOutput(Devices devices)
-            : this(devices, 0x10, 0x11)
+            : this(devices, 0x10, 0x11, 0x12, 0x13)
         {
         }
 
-        public SerialInputOutput(Devices devices, byte statusPort, byte dataPort)
+        public SerialInputOutput(Devices devices, byte statusPort0, byte dataPort0, byte statusPort1, byte dataPort1)
         {
             devices.RegisterInputPort(
-                statusPort,
+                statusPort0,
                 () =>
                 {
                     // the lowest bit (bit 0) means 'yes, there's input'
@@ -28,7 +38,7 @@
                 });
 
             devices.RegisterOutputPort(
-                statusPort,
+                statusPort0,
                 (b) =>
                 {
                     if (b == 0x3)
@@ -38,42 +48,55 @@
                 });
 
             devices.RegisterInputPort(
-                dataPort,
+                dataPort0,
                 () =>
                 {
                     return data.Count == 0 ? (byte)0x00 : data.Dequeue();
                 });
 
             devices.RegisterOutputPort(
-                dataPort, 
+                dataPort0, 
                 (b) => 
                 {
-                    System.Console.Write(Convert.ToChar(b & 0x7f));
+                    Send(this, (byte)(b & 0x7f));
                 });
-        }
 
-        public void Startup()
-        {
-            System.Console.TreatControlCAsInput = true;
-
-            stop = new ManualResetEvent(false);
-            bgThread = new Thread(
+            devices.RegisterInputPort(
+                statusPort1,
                 () =>
                 {
-                    while (!stop.WaitOne(50))
-                    {
-                        var key = System.Console.ReadKey(true);
-                        data.Enqueue(Convert.ToByte(key.KeyChar));
-                    }
+                    // no data ready
+                    return (byte)0xfe;
                 });
 
-            bgThread.Start();
+            devices.RegisterOutputPort(
+                statusPort1,
+                (b) =>
+                {
+                });
+
+            devices.RegisterInputPort(
+                dataPort1,
+                () =>
+                {
+                    // no data available on 2nd port
+                    return (byte)0x00;
+                });
+
+            devices.RegisterOutputPort(
+                dataPort1,
+                (b) =>
+                {
+                });
         }
 
-        public void Shutdown()
+        /// <summary>
+        /// Recieve a character from the keyboard
+        /// </summary>
+        /// <param name="b">The character (as a byte).</param>
+        public void Receive(byte b)
         {
-            stop.Set();
-            bgThread.Join();
+            data.Enqueue(b);
         }
     }
 }

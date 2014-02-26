@@ -1,11 +1,14 @@
 ﻿namespace Crankery.Emulate.Console
 {
+    using System;
+
     class Program
     {
+        [STAThread]
         static void Main(string[] args)
         {
-            var computer = new Computer();
-            computer.Start();
+            var root = new MainView();
+            root.ShowDialog();
         }
     }
 }

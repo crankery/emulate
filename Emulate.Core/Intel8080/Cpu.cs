@@ -7,8 +7,10 @@ namespace Crankery.Emulate.Core.Intel8080
 {
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics;
     using System.Linq;
     using System.Reflection;
+    using System.Reflection.Emit;
 
     /// <summary>
     /// The main implmentation of the i8080 CPU.
@@ -20,7 +22,7 @@ namespace Crankery.Emulate.Core.Intel8080
         private readonly byte[] fetch;
         private bool interruptEnable;
         private bool isHalted;
-        private CircularBuffer<State> log;
+        private Action<string> writeDebugMessage;
 
         public Cpu(IMemory memory, IDevices devices)
         {
@@ -34,6 +36,12 @@ namespace Crankery.Emulate.Core.Intel8080
             Reset();
 
             fetch = new byte[3];
+        }
+
+        public Cpu(IMemory memory, IDevices devices, Action<string> writeDebugMessage)
+            : this(memory, devices)
+        {
+            this.writeDebugMessage = writeDebugMessage;
         }
 
         public bool IsHalted
@@ -51,39 +59,6 @@ namespace Crankery.Emulate.Core.Intel8080
                 }
             }
         }
-
-        public bool Debug
-        {
-            get
-            {
-                return log != null; 
-            }
-
-            set
-            {
-                if (value)
-                {
-                    log = new CircularBuffer<State>(100);
-                }
-                else
-                {
-                    log = null;
-                }
-            }
-        }
-
-        public IEnumerable<string> History
-        {
-            get
-            {
-                return
-                    log == null ? 
-                    Enumerable.Empty<string>() :
-                    log.Values.Select(x => x.ToString());
-            }
-        }
-
-        public ulong Cycle { get; private set; }
 
         public IMemory Memory { get; private set; }
 
@@ -113,9 +88,6 @@ namespace Crankery.Emulate.Core.Intel8080
 
             // And interrupts are probably enabled again.
             interruptEnable = true;
-
-            // and restart time.
-            Cycle = 0;
         }
 
         public int Interrupt(byte opcode)
@@ -153,7 +125,8 @@ namespace Crankery.Emulate.Core.Intel8080
         public int Step()
         {
             var cycles = 0;
-            
+            var originalProgramCounter = registers.ProgramCounter;
+
             // don't do anyting if we're halted.
             if (!IsHalted)
             {
@@ -177,9 +150,10 @@ namespace Crankery.Emulate.Core.Intel8080
                 // execute the operation
                 cycles = ExecuteOperation(operation, fetch);
 
-                if (Debug)
+                if (writeDebugMessage != null)
                 {
-                    log.Submit(new State(operation.Opcode, fetch, registers));
+                    var s = new State(operation.Opcode, fetch, registers, originalProgramCounter);
+                    writeDebugMessage(s.ToString());
                 }
             }
 
@@ -203,27 +177,19 @@ namespace Crankery.Emulate.Core.Intel8080
 
         internal int ExecuteOperation(Operation operation, byte[] instruction)
         {
-            // execute the operation
-            var extraCycles = operation.Execute(instruction);
-
-            // update our cycle count
-            var cycles = operation.Opcode.Duration + extraCycles;
-
-            Cycle += (ulong)cycles;
-
-            return cycles;
+            // execute the operation & update our cycle count
+            return operation.Opcode.Duration + operation.Execute(instruction);
         }
 
         internal void BuildOperations()
         {
-            var methodInfos = typeof(Cpu).GetMethods(BindingFlags.NonPublic | BindingFlags.Instance);
+            var methodInfos = this.GetType().GetMethods(BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance);
             foreach (var methodInfo in methodInfos)
             {
                 var opcodeAttributes = methodInfo.GetCustomAttributes(typeof(OpcodeAttribute));
                 foreach (OpcodeAttribute opcodeAttribute in opcodeAttributes)
                 {
-                    var execute = new Func<byte[], int>(
-                        (p) => (int)methodInfo.Invoke(this, new object[] { p }));
+                    var execute = (Func<byte[], int>)Delegate.CreateDelegate(typeof(Func<byte[], int>), this, methodInfo);
 
                     var operation = new Operation
                     {

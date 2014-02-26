@@ -17,8 +17,7 @@
             
             // this application's entry point is 0x100
             cpu.ProgramCounter = 0x100;
-            cpu.Debug = true;
-
+            
             // Halt (0x76) on the CPUER and CPUOK subroutines
             cpu.Memory.Write(0x0689, 0x76); // CPUER
             cpu.Memory.Write(0x069b, 0x76); // CPUOK

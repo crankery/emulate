@@ -13,16 +13,6 @@ namespace Crankery.Emulate.Core
         bool IsHalted { get; }
 
         /// <summary>
-        /// Get or set the debug state of the CPU
-        /// </summary>
-        bool Debug { get; set; }
-
-        /// <summary>
-        /// Get the current cycle count on the CPU (this value is unchecked).
-        /// </summary>
-        ulong Cycle { get; }
-
-        /// <summary>
         /// Reset the CPU
         /// </summary>
         void Reset();

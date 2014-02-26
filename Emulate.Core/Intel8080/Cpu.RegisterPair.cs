@@ -32,34 +32,16 @@ namespace Crankery.Emulate.Core.Intel8080
 
             return 0;
         }
+
         [Opcode(Instruction = 0x09, Mnemonic = "DAD BC", Length = 1, Duration = 11)]
-        internal int DoubleAddBC(byte[] instruction)
-        {
-            registers.HL = AddWord(registers.HL, registers.BC);
-
-            return 0;
-        }
-
         [Opcode(Instruction = 0x19, Mnemonic = "DAD DE", Length = 1, Duration = 11)]
-        internal int DoubleAddDE(byte[] instruction)
-        {
-            registers.HL = AddWord(registers.HL, registers.DE);
-
-            return 0;
-        }
-
         [Opcode(Instruction = 0x29, Mnemonic = "DAD HL", Length = 1, Duration = 11)]
-        internal int DoubleAddHL(byte[] instruction)
-        {
-            registers.HL = AddWord(registers.HL, registers.HL);
-
-            return 0;
-        }
-
         [Opcode(Instruction = 0x39, Mnemonic = "DAD SP", Length = 1, Duration = 11)]
-        internal int DoubleAddSP(byte[] instruction)
+        internal int DoubleAddRegisterPair(byte[] instruction)
         {
-            registers.HL = AddWord(registers.HL, registers.StackPointer);
+            var pair = (RegisterPair)((instruction[0] >> 4) & 3);
+
+            registers.HL = AddWord(registers.HL, registers[pair]);
 
             return 0;
         }
@@ -84,10 +66,10 @@ namespace Crankery.Emulate.Core.Intel8080
             return 0;
         }
 
-        [Opcode(Instruction = 0xf9, Mnemonic = "LD SP,HL", Length = 1, Duration = 5)]
+        [Opcode(Instruction = 0xf9, Mnemonic = "SPHL", Length = 1, Duration = 5)]
         internal int LoadStackPointerHL(byte[] instruction)
         {
-            registers.HL = registers.StackPointer;
+            registers.StackPointer = registers.HL;
 
             return 0;
         }

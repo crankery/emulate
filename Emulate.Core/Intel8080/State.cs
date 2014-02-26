@@ -15,23 +15,23 @@ namespace Crankery.Emulate.Core.Intel8080
         private readonly OpcodeAttribute opcode;
         private readonly Registers registers;
 
-        public State(OpcodeAttribute opcode, byte[] fetch, Registers registers)
+        public State(OpcodeAttribute opcode, byte[] fetch, Registers registers, ushort originalProgramCounter)
         {
             this.opcode = opcode;
             this.fetch0 = fetch[0];
             this.fetch1 = fetch[1];
             this.fetch2 = fetch[2];
             this.registers = new Registers(registers);
+            this.registers.ProgramCounter = originalProgramCounter;
         }
 
         public override string ToString()
         {
             var tracer = new StringBuilder();
 
-            // the PC has already been advanced to the next instruction
             tracer.AppendFormat(
                 "{0:x4}: {1:x2} {2} {3}",
-                registers.ProgramCounter - opcode.Length,
+                registers.ProgramCounter,
                 fetch0,
                 opcode.Length > 1 ? fetch1.ToString("x2") : "  ",
                 opcode.Length > 2 ? fetch2.ToString("x2") : "  ");
