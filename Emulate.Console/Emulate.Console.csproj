@@ -61,6 +61,8 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Glyphs.cs" />
+    <Compile Include="TerminalKeyboard.cs" />
+    <Compile Include="KeyTranslate.cs" />
     <Compile Include="MainView.xaml.cs">
       <DependentUpon>MainView.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -69,7 +71,7 @@
     <Compile Include="SerialInputOutput.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Terminal.cs" />
+    <Compile Include="TerminalDisplay.cs" />
     <Compile Include="ViewModel.cs" />
   </ItemGroup>
   <ItemGroup>

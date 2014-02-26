@@ -1,0 +1,21 @@
+﻿<Window x:Class="Crankery.Emulate.Console.MainView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+        xmlns:local="clr-namespace:Crankery.Emulate.Console"
+        mc:Ignorable="d" 
+        Height="550"
+        Width="900" 
+        Closing="Window_Closing"
+        KeyDown="Window_KeyDown"
+        Background="Black"
+        Title="{Binding Title}">
+
+        <Grid Background="Black" Width="800" Height="480">
+            <Image Source="{Binding Path=TerminalDisplay.Display}" 
+                    Width="800" 
+                    Height="480"
+                    Stretch="None"/>
+        </Grid>
+</Window>

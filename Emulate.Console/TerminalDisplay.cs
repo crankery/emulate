@@ -5,10 +5,16 @@
     using System.Linq;
     using System.Timers;
     using System.Windows;
+    using System.Windows.Input;
     using System.Windows.Media;
     using System.Windows.Media.Imaging;
 
-    public class Terminal
+    /// <summary>
+    /// Sort of vt100 terminal emulation
+    /// The vt100 escape codes are from Ray Burns http://stackoverflow.com/a/3223875/399148
+    /// TODO: sanity checks.
+    /// </summary>
+    public class TerminalDisplay
     {
         private const int Width = 80;
         private const int Height = 24;
@@ -19,22 +25,22 @@
         private readonly WriteableBitmap display;
         private readonly byte[] cells = new byte[Width * Height];
         private readonly Glyphs glyphs = new Glyphs();
+
         private int x;
         private int y;
-
-        private string escape = null;
-        private string escapeArgs = null;
-
-        public event PropertyChangedEventHandler PropertyChanged = delegate { };
+        private string escape;
+        private string escapeArgs;
         private bool showCursor;
         private bool hideCursor;
 
-        public Terminal()
+        public event PropertyChangedEventHandler PropertyChanged = delegate { };
+        
+        public TerminalDisplay()
         {
             hideCursor = false;
             display = BitmapFactory.New(Width * CharacterWidth, Height * CharacterHeight);
-            display.Clear(Background);
-            Clear();
+
+            ClearRange(0, 0, Width - 1, Height - 1);
         }
 
         public WriteableBitmap Display
@@ -55,7 +61,6 @@
             private set
             {
                 x = value;
-                OnPropertyChanged("X");
 
                 if (x >= Width)
                 {
@@ -93,8 +98,6 @@
                 {
                     y = 0;
                 }
-
-                OnPropertyChanged("Y");
             }
         }
 
@@ -126,7 +129,7 @@
             }
         }
 
-        public void Receive(byte c)
+        public void DisplayCharacter(byte c)
         {
             lock (this)
             {
@@ -405,25 +408,6 @@
             }
         }
 
-        private void Clear()
-        {
-            for (x = 0; x < 80; x++)
-            {
-                for (y = 0; y < 24; y++)
-                {
-                    cells[y * Width + x] = ((byte)' ');
-                }
-            }
-
-            Home();
-        }
-
-        private void Home()
-        {
-            Y = 0;
-            X = 0;
-        }
-
         private void Scroll()
         {
             display.Blit(
@@ -458,14 +442,6 @@
                 glyphs[c], 
                 new Rect(0, 0, CharacterWidth, CharacterHeight),
                 WriteableBitmapExtensions.BlendMode.None);
-
-            // notify listeners that the image has changed.
-            PropertyChanged(this, new PropertyChangedEventArgs("image"));
-        }
-
-        private void OnPropertyChanged(string propertyName)
-        {
-            PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

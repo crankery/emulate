@@ -50,7 +50,7 @@
                     for (int row = 0; row < 16; row++)
                     {
                         // the render bitmaps are 10x20 (double high, scan lines)
-                        // any pixels set in col[0] are repeated in cols 8 & 9 for line drawing.
+                        // any pixels set in col[7] are repeated in cols 8 & 9 for line drawing.
 
                         var glyph = BitmapFactory.New(10, 20);
                         glyph.Clear(Colors.Black);
