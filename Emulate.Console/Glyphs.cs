@@ -6,13 +6,16 @@
 
     public class Glyphs
     {
-        private readonly WriteableBitmap[] glyphs = new WriteableBitmap[256];
+        private readonly static Color Foreground = Colors.White;
+        private readonly static Color Background = Colors.Black;
 
+        private readonly WriteableBitmap[] glyphs = new WriteableBitmap[256];
+        
         public Glyphs()
         {
             // via http://www.vt100.net/dec/vt220/glyphs
             // thanks Paul Williams for explaining this. :)
-            ExtractGlyffs(@"Resources\vt220-rom-separated.png");
+            ExtractGlyphs(@"Resources\vt220-rom-separated.png");
         }
 
         public WriteableBitmap this[byte c]
@@ -23,7 +26,7 @@
             }
         }
 
-        private void ExtractGlyffs(string imagePath)
+        private void ExtractGlyphs(string imagePath)
         {
             using (var imageStreamSource = new FileStream(imagePath, FileMode.Open, FileAccess.Read, FileShare.Read))
             {
@@ -53,7 +56,7 @@
                         // any pixels set in col[7] are repeated in cols 8 & 9 for line drawing.
 
                         var glyph = BitmapFactory.New(10, 20);
-                        glyph.Clear(Colors.Black);
+                        glyph.Clear(Background);
                         glyphs[row + col * 16] = glyph;
 
                         for (int y = 0; y < 10; y++)
@@ -65,15 +68,15 @@
 
                                 if (p == 0)
                                 {
-                                    glyph.SetPixel(x, y * 2, 0xff, Colors.White);
-                                    glyph.SetPixel(x, y * 2 + 1, 0xff, Colors.White);
+                                    glyph.SetPixel(x, y * 2, 0xff, Foreground);
+                                    glyph.SetPixel(x, y * 2 + 1, 0xff, Foreground);
 
                                     if (x == 7)
                                     {
-                                        glyph.SetPixel(8, y * 2, 0xff, Colors.White);
-                                        glyph.SetPixel(9, y * 2, 0xff, Colors.White);
-                                        glyph.SetPixel(8, y * 2 + 1, 0xff, Colors.White);
-                                        glyph.SetPixel(9, y * 2 + 1, 0xff, Colors.White);
+                                        glyph.SetPixel(8, y * 2, 0xff, Foreground);
+                                        glyph.SetPixel(8, y * 2 + 1, 0xff, Foreground);
+                                        glyph.SetPixel(8, y * 2, 0xff, Foreground);
+                                        glyph.SetPixel(9, y * 2 + 1, 0xff, Foreground);
                                     }
                                 }
                             }
