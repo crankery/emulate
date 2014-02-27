@@ -7,7 +7,7 @@
     {
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
-        private const int DriveCount = 4; // apparently could be up to 16.
+        private const int DriveCount = 16;
         private const int SectorLength = 137;
         private const int SectorCount = 32;
         private const int TrackCount = 77;
@@ -69,6 +69,12 @@
                         diskStatus[selectedDrive] = DriveStatus.HeadMovementOk;
                         offset[selectedDrive] = 0xff;
                         sector[selectedDrive] = 0xff;
+
+                        Logger.Trace("Control: Disk: {0:x1} selected.", selectedDrive);
+                    }
+                    else
+                    {
+                        Logger.Trace("Control: Disk: {0:x1} deselected.", selectedDrive);
                     }
                 });
 
@@ -118,6 +124,8 @@
                             track[selectedDrive] = TrackCount - 1;
                         }
 
+                        Logger.Trace("Control: Disk: {0:x1} Track in to {1:x2}", selectedDrive, track[selectedDrive]);
+
                         sector[selectedDrive] = 0xff;
                         offset[selectedDrive] = 0xff;
                     }
@@ -133,6 +141,8 @@
                             track[selectedDrive] = 0;
                         }
 
+                        Logger.Trace("Control: Disk: {0:x1} Track out to {1:x2}", selectedDrive, track[selectedDrive]);
+
                         sector[selectedDrive] = 0xff;
                         offset[selectedDrive] = 0xff;
                     }
@@ -142,6 +152,8 @@
                         // load head
                         diskStatus[selectedDrive] |= DriveStatus.Loaded;
                         diskStatus[selectedDrive] |= DriveStatus.ReadyToRead;
+
+                        Logger.Trace("Control: Disk: {0:x1} Load head", selectedDrive);
                     }
 
                     if (cmd.HasFlag(DriveControl.UnloadHead))
@@ -149,6 +161,8 @@
                         // unload head
                         diskStatus[selectedDrive] &= ~DriveStatus.Loaded;
                         diskStatus[selectedDrive] &= ~DriveStatus.ReadyToRead;
+
+                        Logger.Trace("Control: Disk: {0:x1} Unload head", selectedDrive);
 
                         sector[selectedDrive] = 0xff;
                         offset[selectedDrive] = 0xff;
@@ -159,12 +173,19 @@
                         // start write sequence
                         diskStatus[selectedDrive] |= DriveStatus.ReadyToWrite;
 
+                        Logger.Trace("Control: Disk: {0:x1} Start write", selectedDrive);
+
                         // go to byte zero
                         offset[selectedDrive] = 0x0;
                     }
 
                     if (track[selectedDrive] == 0)
                     {
+                        if (!diskStatus[selectedDrive].HasFlag(DriveStatus.TrackZero))
+                        {
+                            Logger.Trace("Control: Disk: {0:x1} at track zero", selectedDrive);
+                        }
+
                         diskStatus[selectedDrive] |= DriveStatus.TrackZero;
                     }
                     else
@@ -178,8 +199,6 @@
                 port2,
                 () =>
                 {
-                    var isValid = diskImage[selectedDrive] != null;
-
                     offset[selectedDrive]++;
                     if (offset[selectedDrive] >= SectorLength)
                     {
@@ -191,16 +210,22 @@
                         sector[selectedDrive] * SectorLength +
                         offset[selectedDrive];
 
+                    var isValid =
+                        diskStatus[selectedDrive].HasFlag(DriveStatus.Loaded) &&
+                        diskStatus[selectedDrive].HasFlag(DriveStatus.ReadyToRead) &&
+                        diskImage[selectedDrive] != null &&
+                        index < diskImage[selectedDrive].Length;
+
                     var result = isValid ? diskImage[selectedDrive][index] : (byte)0xff;
 
                     Logger.Trace(
-                        "Read: Disk: {0:x1} Track: {1:x2} Sector: {2:x2} Byte: {3:x2} Value: {4:x2} [{5}]",
+                        "Read: Disk: {0:x1} Track: {1:x2} Sector: {2:x1} Byte: {3:x2} Value: {4:x2} [{5}]",
                         selectedDrive,
                         track[selectedDrive],
                         sector[selectedDrive],
                         offset[selectedDrive],
                         result,
-                        isValid ? "ok" : "bad");
+                        isValid ? "ok" : "fail");
 
                     return result;
                 });
@@ -210,37 +235,38 @@
                 port2,
                 (b) =>
                 {
-                    var isValid = 
-                        diskStatus[selectedDrive].HasFlag(DriveStatus.Loaded) && 
-                        diskStatus[selectedDrive].HasFlag(DriveStatus.ReadyToWrite) && 
-                        diskImage[selectedDrive] != null;
-
                     var index =
                         track[selectedDrive] * SectorCount * SectorLength +
                         sector[selectedDrive] * SectorLength +
                         offset[selectedDrive];
 
+                    var isValid =
+                        diskStatus[selectedDrive].HasFlag(DriveStatus.Loaded) &&
+                        diskStatus[selectedDrive].HasFlag(DriveStatus.ReadyToWrite) &&
+                        diskImage[selectedDrive] != null &&
+                        index < diskImage[selectedDrive].Length;
+
                     if (isValid)
                     {
                         diskImage[selectedDrive][index] = b;
+                    }
 
-                        Logger.Trace(
-                            "Write: Disk: {0:x1} Track: {1:x2} Sector: {2:x2} Byte: {3:x2} Value: {4:x2} [{5}]",
-                            selectedDrive,
-                            track[selectedDrive],
-                            sector[selectedDrive],
-                            offset[selectedDrive],
-                            b,
-                            isValid ? "ok" : "bad");
+                    Logger.Trace(
+                           "Write: Disk: {0:x1} Track: {1:x2} Sector: {2:x2} Byte: {3:x2} Value: {4:x2} [{5}]",
+                           selectedDrive,
+                           track[selectedDrive],
+                           sector[selectedDrive],
+                           offset[selectedDrive],
+                           b,
+                           isValid ? "ok" : "fail");
 
-                        // go to next byte for the next write
-                        offset[selectedDrive]++;
-                        if (offset[selectedDrive] >= SectorLength)
-                        {
-                            // rewrite the last byte over and over again.
-                            // it's as though things write an extra zero byte on purpose.
-                            offset[selectedDrive] = SectorLength - 1;
-                        }
+                    // go to next byte for the next write
+                    offset[selectedDrive]++;
+                    if (offset[selectedDrive] >= SectorLength)
+                    {
+                        // rewrite the last byte over and over again.
+                        // it's as though things write an extra zero byte on purpose.
+                        offset[selectedDrive] = SectorLength - 1;
                     }
                 });
         }
@@ -266,6 +292,7 @@
             else
             {
                 diskImage[driveNumber] = null;
+                diskStatus[driveNumber] = (DriveStatus)0;
             }
         }
     }
