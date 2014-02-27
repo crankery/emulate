@@ -1,9 +1,12 @@
 ﻿namespace Crankery.Emulate.Console
 {
+    using NLog;
     using System;
 
     public class Disk
     {
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+
         private const int DriveCount = 4; // apparently could be up to 16.
         private const int SectorLength = 137;
         private const int SectorCount = 32;
@@ -156,8 +159,8 @@
                         // start write sequence
                         diskStatus[selectedDrive] |= DriveStatus.ReadyToWrite;
 
-                        // the write method will go to byte zero
-                        offset[selectedDrive] = 0xff;
+                        // go to byte zero
+                        offset[selectedDrive] = 0x0;
                     }
 
                     if (track[selectedDrive] == 0)
@@ -175,23 +178,31 @@
                 port2,
                 () =>
                 {
-                    if (diskImage[selectedDrive] != null)
+                    var isValid = diskImage[selectedDrive] != null;
+
+                    offset[selectedDrive]++;
+                    if (offset[selectedDrive] >= SectorLength)
                     {
-                        offset[selectedDrive]++;
-                        if (offset[selectedDrive] >= SectorLength)
-                        {
-                            offset[selectedDrive] = 0;
-                        }
-
-                        var index =
-                            track[selectedDrive] * SectorCount * SectorLength +
-                            sector[selectedDrive] * SectorLength +
-                            offset[selectedDrive];
-
-                        return diskImage[selectedDrive][index];
+                        offset[selectedDrive] = 0;
                     }
 
-                    return 0xff;
+                    var index =
+                        track[selectedDrive] * SectorCount * SectorLength +
+                        sector[selectedDrive] * SectorLength +
+                        offset[selectedDrive];
+
+                    var result = isValid ? diskImage[selectedDrive][index] : (byte)0xff;
+
+                    Logger.Trace(
+                        "Read: Disk: {0:x1} Track: {1:x2} Sector: {2:x2} Byte: {3:x2} Value: {4:x2} [{5}]",
+                        selectedDrive,
+                        track[selectedDrive],
+                        sector[selectedDrive],
+                        offset[selectedDrive],
+                        result,
+                        isValid ? "ok" : "bad");
+
+                    return result;
                 });
 
             // write data
@@ -199,21 +210,37 @@
                 port2,
                 (b) =>
                 {
-                    // TODO: check to see that the drive is actually writing.
-                    if (diskImage[selectedDrive] != null)
+                    var isValid = 
+                        diskStatus[selectedDrive].HasFlag(DriveStatus.Loaded) && 
+                        diskStatus[selectedDrive].HasFlag(DriveStatus.ReadyToWrite) && 
+                        diskImage[selectedDrive] != null;
+
+                    var index =
+                        track[selectedDrive] * SectorCount * SectorLength +
+                        sector[selectedDrive] * SectorLength +
+                        offset[selectedDrive];
+
+                    if (isValid)
                     {
+                        diskImage[selectedDrive][index] = b;
+
+                        Logger.Trace(
+                            "Write: Disk: {0:x1} Track: {1:x2} Sector: {2:x2} Byte: {3:x2} Value: {4:x2} [{5}]",
+                            selectedDrive,
+                            track[selectedDrive],
+                            sector[selectedDrive],
+                            offset[selectedDrive],
+                            b,
+                            isValid ? "ok" : "bad");
+
+                        // go to next byte for the next write
                         offset[selectedDrive]++;
                         if (offset[selectedDrive] >= SectorLength)
                         {
-                            offset[selectedDrive] = 0;
+                            // rewrite the last byte over and over again.
+                            // it's as though things write an extra zero byte on purpose.
+                            offset[selectedDrive] = SectorLength - 1;
                         }
-
-                        var index =
-                            track[selectedDrive] * SectorCount * SectorLength +
-                            sector[selectedDrive] * SectorLength +
-                            offset[selectedDrive];
-
-                        diskImage[selectedDrive][index] = b;
                     }
                 });
         }
