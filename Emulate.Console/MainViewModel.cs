@@ -8,66 +8,51 @@ namespace Crankery.Emulate.Console
     public class MainViewModel : ViewModel
     {
         private readonly Computer computer;
-        private readonly TerminalDisplay terminalDisplay;
-        private readonly TerminalKeyboard terminalKeyboard;
+        private readonly Terminal terminal;
         private readonly Dispatcher dispatcher;
-
-        private string title = "Altair 8800";
+        private readonly ICommand reset;
 
         public MainViewModel(Dispatcher dispatcher)
         {
             this.dispatcher = dispatcher;
 
             computer = new Computer();
-            terminalDisplay = new TerminalDisplay();
-            terminalKeyboard = new TerminalKeyboard();
-
+            terminal = new Terminal();
+            
             // show bytes sent to the serial i/o to the display 
             computer.SerialInputOutput.Send +=
                 (s, e) =>
                 {
                     dispatcher.InvokeAsync(
-                        (Action)(() => terminalDisplay.DisplayCharacter(e)));
+                        (Action)(() => terminal.DisplayCharacter(e)));
                 };
 
             // send keypresses to the serial i/o
-            terminalKeyboard.KeyPressed +=
+            terminal.KeyPressed +=
                 (s, e) =>
                 {
                     dispatcher.InvokeAsync(
                         (Action)(() => computer.SerialInputOutput.Receive(e)));
                 };
 
+            reset = new DelegateCommand(() => computer.Reset());
+
             computer.Start();
         }
 
-        public TerminalDisplay TerminalDisplay
+        public Terminal Terminal
         {
             get
             {
-                return terminalDisplay;
+                return terminal;
             }
         }
 
-        public TerminalKeyboard TerminalKeyboard
+        public ICommand Reset
         {
             get
             {
-                return terminalKeyboard;
-            }
-        }
-
-        public string Title
-        {
-            get
-            {
-                return title;
-            }
-
-            set
-            {
-                title = value;
-                OnPropertyChanged("Title");
+                return reset;
             }
         }
 

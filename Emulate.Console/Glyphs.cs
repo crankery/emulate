@@ -6,9 +6,11 @@
 
     public class Glyphs
     {
+        public const int Width = 10;
+        public const int Height = 20;
         private readonly static Color Foreground = Colors.White;
         private readonly static Color Background = Colors.Black;
-
+        
         private readonly WriteableBitmap[] glyphs = new WriteableBitmap[256];
         
         public Glyphs()

@@ -3,28 +3,30 @@
     using System;
     using System.ComponentModel;
     using System.Linq;
-    using System.Timers;
     using System.Windows;
+    using System.Windows.Controls;
     using System.Windows.Input;
     using System.Windows.Media;
     using System.Windows.Media.Imaging;
+    using System.Windows.Threading;
 
     /// <summary>
     /// Sort of vt100 terminal emulation
     /// The vt100 escape codes are from Ray Burns http://stackoverflow.com/a/3223875/399148
     /// TODO: sanity checks.
     /// </summary>
-    public class TerminalDisplay
+    public partial class Terminal : UserControl
     {
-        private const int Width = 80;
-        private const int Height = 24;
-        private const int CharacterWidth = 10;
-        private const int CharacterHeight = 20;
-        private static readonly Color Background = Colors.Black;
+        private const int DisplayWidth = 80;
+        private const int DisplayHeight = 24;
+        private const int CharacterWidth = Glyphs.Width;
+        private const int CharacterHeight = Glyphs.Height;
+        private const int BorderWidth = 4;
+        private static readonly Color DisplayBackground = Colors.Black;
 
         private readonly WriteableBitmap display;
-        private readonly byte[] cells = new byte[Width * Height];
-        private readonly Glyphs glyphs = new Glyphs();
+        private readonly byte[] cells = new byte[DisplayWidth * DisplayHeight];
+        private readonly Glyphs glyphs;
 
         private int x;
         private int y;
@@ -33,21 +35,36 @@
         private bool showCursor;
         private bool hideCursor;
 
-        public event PropertyChangedEventHandler PropertyChanged = delegate { };
-        
-        public TerminalDisplay()
-        {
-            hideCursor = false;
-            display = BitmapFactory.New(Width * CharacterWidth, Height * CharacterHeight);
+        public delegate void KeyPressedEvent(object sender, byte code);
 
-            ClearRange(0, 0, Width - 1, Height - 1);
-        }
+        public event KeyPressedEvent KeyPressed = delegate { };
 
-        public WriteableBitmap Display
+        public Terminal()
         {
-            get
+            InitializeComponent();
+
+            display = BitmapFactory.New(DisplayWidth * CharacterWidth + BorderWidth * 2, DisplayHeight * CharacterHeight + BorderWidth * 2);
+            display.Clear(DisplayBackground);
+
+            DisplayImage.Source = display;
+
+            if (!DesignerProperties.GetIsInDesignMode(this))
             {
-                return display;
+                glyphs = new Glyphs();
+
+                ClearRange(0, 0, DisplayWidth - 1, DisplayHeight - 1);
+            
+                var timer = new DispatcherTimer
+                {
+                    Interval = new TimeSpan(0, 0, 0, 0, 333),
+                    IsEnabled = true
+                };
+
+                timer.Tick += 
+                    (s, e) =>
+                    {
+                        ShowCursor ^= true;
+                    };
             }
         }
 
@@ -62,7 +79,7 @@
             {
                 x = value;
 
-                if (x >= Width)
+                if (x >= DisplayWidth)
                 {
                     // move down to the start of the next line.
                     x = 0;
@@ -71,7 +88,7 @@
 
                 if (x < 0)
                 {
-                    x = Width -1;
+                    x = DisplayWidth - 1;
                     Y--;
                 }
             }
@@ -88,9 +105,9 @@
             {
                 y = value;
 
-                if (y >= Height)
+                if (y >= DisplayHeight)
                 {
-                    y = Height - 1;
+                    y = DisplayHeight - 1;
                     Scroll();
                 }
 
@@ -100,8 +117,7 @@
                 }
             }
         }
-
-        public bool ShowCursor
+        private bool ShowCursor
         {
             get
             {
@@ -169,26 +185,26 @@
 
         private void DrawCursor()
         {
-            if (showCursor && !hideCursor)
+            if (showCursor && !hideCursor && DisplayImage.IsFocused)
             {
                 display.FillRectangle(
-                   CharacterWidth * x,
-                   CharacterHeight * (y + 1) - 3,
-                   CharacterWidth * (x + 1) - 1,
-                   CharacterHeight * (y + 1) - 1,
+                   CharacterWidth * x + BorderWidth,
+                   CharacterHeight * (y + 1) - 3 + BorderWidth,
+                   CharacterWidth * (x + 1) - 1 + BorderWidth,
+                   CharacterHeight * (y + 1) - 1 + BorderWidth,
                    Colors.White);
 
                 display.Blit(
-                    new Rect(CharacterWidth * x, CharacterHeight * y, CharacterWidth, CharacterHeight),
-                    glyphs[cells[y * Width + x]],
+                    new Rect(CharacterWidth * x + BorderWidth, CharacterHeight * y + BorderWidth, CharacterWidth, CharacterHeight),
+                    glyphs[cells[y * DisplayWidth + x]],
                     new Rect(0, 0, CharacterWidth, CharacterHeight),
                     WriteableBitmapExtensions.BlendMode.Additive);
             }
             else
             {
                 display.Blit(
-                    new Rect(CharacterWidth * x, CharacterHeight * y, CharacterWidth, CharacterHeight),
-                    glyphs[cells[y * Width + x]],
+                    new Rect(CharacterWidth * x + BorderWidth, CharacterHeight * y + BorderWidth, CharacterWidth, CharacterHeight),
+                    glyphs[cells[y * DisplayWidth + x]],
                     new Rect(0, 0, CharacterWidth, CharacterHeight),
                     WriteableBitmapExtensions.BlendMode.None);
             }
@@ -308,13 +324,13 @@
                     switch (arg0 ?? 0)
                     {
                         case 0:
-                            ClearRange(x, y, Width, Height);
+                            ClearRange(x, y, DisplayWidth, DisplayHeight);
                             break;
                         case 1:
                             ClearRange(0, 0, X + 1, Y);
                             break;
                         case 2:
-                            ClearRange(0, 0, Width, Height);
+                            ClearRange(0, 0, DisplayWidth, DisplayHeight);
                             break;
                     }
                     break;
@@ -323,13 +339,13 @@
                     switch (arg0 ?? 0)
                     {
                         case 0:
-                            ClearRange(X, Y, Width, Y);
+                            ClearRange(X, Y, DisplayWidth, Y);
                             break;
                         case 1:
                             ClearRange(0, Y, X + 1, Y);
                             break;
                         case 2:
-                            ClearRange(0, Y, Width, Y);
+                            ClearRange(0, Y, DisplayWidth, Y);
                             break;
                     }
                     break;
@@ -393,17 +409,17 @@
         private void ClearRange(int left, int top, int right, int bottom)
         {
             display.FillRectangle(
-                CharacterWidth * left, 
-                CharacterHeight * left,
-                CharacterWidth * Math.Min(right, Width) - 1,
-                CharacterHeight * Math.Min(bottom, Height) - 1,
-                Background);
+                CharacterWidth * left + BorderWidth,
+                CharacterHeight * left + BorderWidth,
+                CharacterWidth * Math.Min(right, DisplayWidth) - 1 + BorderWidth,
+                CharacterHeight * Math.Min(bottom, DisplayHeight) - 1 + BorderWidth,
+                DisplayBackground);
 
-            for (int x = left; x < Math.Min(right, Width); x++)
+            for (int x = left; x < Math.Min(right, DisplayWidth); x++)
             {
-                for (int y = top; y < Math.Min(bottom, Height); y++)
+                for (int y = top; y < Math.Min(bottom, DisplayHeight); y++)
                 {
-                    cells[y * Width + x] = (byte)' ';
+                    cells[y * DisplayWidth + x] = (byte)' ';
                 }
             }
         }
@@ -411,37 +427,69 @@
         private void Scroll()
         {
             display.Blit(
-                new Rect(0, 0, CharacterWidth * Width, CharacterHeight * (Height - 1)),
+                new Rect(BorderWidth, BorderWidth, CharacterWidth * DisplayWidth, CharacterHeight * (DisplayHeight - 1)),
                 display,
-                new Rect(0, CharacterHeight, CharacterWidth * Width, CharacterHeight * (Height - 1)),
+                new Rect(BorderWidth, CharacterHeight + BorderWidth, CharacterWidth * DisplayWidth, CharacterHeight * (DisplayHeight - 1)),
                 WriteableBitmapExtensions.BlendMode.None);
-            
-            display.FillRectangle(0, CharacterHeight * (Height - 1), CharacterWidth * Width - 1, CharacterHeight * Height - 1, Background);
 
-            for (int x = 0; x < Width; x++)
+            display.FillRectangle(
+                0, 
+                CharacterHeight * (DisplayHeight - 1), 
+                CharacterWidth * DisplayWidth - 1, 
+                CharacterHeight * DisplayHeight - 1, 
+                DisplayBackground);
+
+            for (int x = 0; x < DisplayWidth; x++)
             {
-                for (int y = 1; y < Height; y++)
+                for (int y = 1; y < DisplayHeight; y++)
                 {
-                    cells[(y - 1) * Width + x] = cells[1 * Width + x];
+                    cells[(y - 1) * DisplayWidth + x] = cells[1 * DisplayWidth + x];
                 }
             }
 
-            for (int x = 0; x < Width; x++)
+            for (int x = 0; x < DisplayWidth; x++)
             {
-                cells[(Height-1) * Width + x] = (byte)' ';
+                cells[(DisplayHeight - 1) * DisplayWidth + x] = (byte)' ';
             }
         }
 
         private void DrawCharacter(byte c)
         {
-            cells[y * Width + x] = c;
+            cells[y * DisplayWidth + x] = c;
 
             // the glyphs are currently 10x20 pixel bitmaps
             display.Blit(
-                new Rect(CharacterWidth * x, CharacterHeight * y, CharacterWidth, CharacterHeight),
-                glyphs[c], 
+                new Rect(CharacterWidth * x + BorderWidth, CharacterHeight * y + BorderWidth, CharacterWidth, CharacterHeight),
+                glyphs[c],
                 new Rect(0, 0, CharacterWidth, CharacterHeight),
                 WriteableBitmapExtensions.BlendMode.None);
+        }
+
+        private void OnKeyDown(object sender, KeyEventArgs e)
+        {
+            var code = KeyTranslate.Translate(e.Key);
+
+            if (code.HasValue)
+            {
+                e.Handled = true;
+
+                KeyPressed(this, code.Value);
+            }
+        }
+
+        private void OnGotFocus(object sender, RoutedEventArgs e)
+        {
+            DrawCursor();
+        }
+
+        private void OnLostFocus(object sender, RoutedEventArgs e)
+        {
+            DrawCursor();
+        }
+
+        private void OnMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            DisplayImage.Focus();
         }
     }
 }

@@ -8,14 +8,20 @@
         Height="550"
         Width="900" 
         Closing="Window_Closing"
-        KeyDown="Window_KeyDown"
-        Background="Black"
-        Title="{Binding Title}">
+        Title="Altair 8800">
 
-        <Grid Background="Black" Width="800" Height="480">
-            <Image Source="{Binding Path=TerminalDisplay.Display}" 
-                    Width="800" 
-                    Height="480"
-                    Stretch="None"/>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        
+        <Grid Background="Black">
+            <ContentPresenter Content="{Binding Path=Terminal}"/>
         </Grid>
+
+        <StackPanel Orientation="Horizontal" Margin="5" Grid.Row="1">
+            <Button Content="Reset" Command="{Binding Path=Reset}"/>
+        </StackPanel>
+    </Grid>
 </Window>
