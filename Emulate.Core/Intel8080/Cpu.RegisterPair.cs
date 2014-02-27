@@ -7,10 +7,10 @@ namespace Crankery.Emulate.Core.Intel8080
 {
     public partial class Cpu
     {
-        [Opcode(Instruction = 0x03, Mnemonic = "INC BC", Length = 1, Duration = 6)]
-        [Opcode(Instruction = 0x13, Mnemonic = "INC DE", Length = 1, Duration = 6)]
-        [Opcode(Instruction = 0x23, Mnemonic = "INC HL", Length = 1, Duration = 6)]
-        [Opcode(Instruction = 0x33, Mnemonic = "INC SP", Length = 1, Duration = 6)]
+        [Opcode(Instruction = 0x03, Mnemonic = "INC  B", Length = 1, Duration = 6)]
+        [Opcode(Instruction = 0x13, Mnemonic = "INC  D", Length = 1, Duration = 6)]
+        [Opcode(Instruction = 0x23, Mnemonic = "INC  H", Length = 1, Duration = 6)]
+        [Opcode(Instruction = 0x33, Mnemonic = "INC  SP", Length = 1, Duration = 6)]
         internal int IncrementRegisterPair(byte[] instruction)
         {
             var pair = (RegisterPair)((instruction[0] >> 4) & 3);
@@ -20,10 +20,10 @@ namespace Crankery.Emulate.Core.Intel8080
             return 0;
         }
 
-        [Opcode(Instruction = 0x0b, Mnemonic = "DEC BC", Length = 1, Duration = 5)]
-        [Opcode(Instruction = 0x1b, Mnemonic = "DEC DE", Length = 1, Duration = 5)]
-        [Opcode(Instruction = 0x2b, Mnemonic = "DEC HL", Length = 1, Duration = 5)]
-        [Opcode(Instruction = 0x3b, Mnemonic = "DEC SP", Length = 1, Duration = 5)]
+        [Opcode(Instruction = 0x0b, Mnemonic = "DEC  B", Length = 1, Duration = 5)]
+        [Opcode(Instruction = 0x1b, Mnemonic = "DEC  D", Length = 1, Duration = 5)]
+        [Opcode(Instruction = 0x2b, Mnemonic = "DEC  H", Length = 1, Duration = 5)]
+        [Opcode(Instruction = 0x3b, Mnemonic = "DEC  SP", Length = 1, Duration = 5)]
         internal int DecrementRegisterPair(byte[] instruction)
         {
             var pair = (RegisterPair)((instruction[0] >> 4) & 3);
@@ -33,10 +33,10 @@ namespace Crankery.Emulate.Core.Intel8080
             return 0;
         }
 
-        [Opcode(Instruction = 0x09, Mnemonic = "DAD BC", Length = 1, Duration = 11)]
-        [Opcode(Instruction = 0x19, Mnemonic = "DAD DE", Length = 1, Duration = 11)]
-        [Opcode(Instruction = 0x29, Mnemonic = "DAD HL", Length = 1, Duration = 11)]
-        [Opcode(Instruction = 0x39, Mnemonic = "DAD SP", Length = 1, Duration = 11)]
+        [Opcode(Instruction = 0x09, Mnemonic = "DAD  B", Length = 1, Duration = 11)]
+        [Opcode(Instruction = 0x19, Mnemonic = "DAD  D", Length = 1, Duration = 11)]
+        [Opcode(Instruction = 0x29, Mnemonic = "DAD  H", Length = 1, Duration = 11)]
+        [Opcode(Instruction = 0x39, Mnemonic = "DAD  SP", Length = 1, Duration = 11)]
         internal int DoubleAddRegisterPair(byte[] instruction)
         {
             var pair = (RegisterPair)((instruction[0] >> 4) & 3);
@@ -46,7 +46,7 @@ namespace Crankery.Emulate.Core.Intel8080
             return 0;
         }
 
-        [Opcode(Instruction = 0xeb, Mnemonic = "EX DE,HL", Length = 1, Duration = 4)]
+        [Opcode(Instruction = 0xeb, Mnemonic = "XCHG", Length = 1, Duration = 4)]
         internal int ExchangeDEAndHL(byte[] instruction)
         {
             var x = registers.DE;
@@ -56,7 +56,7 @@ namespace Crankery.Emulate.Core.Intel8080
             return 0;
         }
 
-        [Opcode(Instruction = 0xe3, Mnemonic = "EX (SP),HL", Length = 1, Duration = 18)]
+        [Opcode(Instruction = 0xe3, Mnemonic = "XTHL", Length = 1, Duration = 18)]
         internal int ExhangeSPAndHL(byte[] instruction)
         {
             var x = Memory.ReadWord(registers.StackPointer);

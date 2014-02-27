@@ -36,16 +36,16 @@ namespace Crankery.Emulate.Core.Intel8080
                 opcode.Length > 1 ? fetch1.ToString("x2") : "  ",
                 opcode.Length > 2 ? fetch2.ToString("x2") : "  ");
 
-            // fix up the mnemonic to have display immediate constant values
+            // fix up the mnemonic to display immediate constant values
             var m = opcode.Mnemonic;
             if (m.Contains("[a16]"))
             {
-                m = m.Replace("[a16]", string.Format("${1:x2}{0:x2}", fetch1, fetch2));
+                m = m.Replace("[a16]", string.Format("{1:x2}{0:x2}h", fetch1, fetch2));
 
             }
             else if (m.Contains("[d8]"))
             {
-                m = m.Replace("[d8]", string.Format("${0:x2}", fetch1));
+                m = m.Replace("[d8]", string.Format("{0:x2}h", fetch1));
             }
 
             tracer.AppendFormat(

@@ -10,7 +10,7 @@ namespace Crankery.Emulate.Core.Intel8080
         /// <summary>
         /// Store accumulator at location.
         /// </summary>
-        [Opcode(Instruction = 0x32, Mnemonic = "ST A,([a16])", Length = 3, Duration = 13)]
+        [Opcode(Instruction = 0x32, Mnemonic = "STA  [a16]", Length = 3, Duration = 13)]
         internal int StoreAccumulatorDirect(byte[] instruction)
         {
             var address = Utility.MakeWord(instruction[2], instruction[1]);
@@ -22,7 +22,7 @@ namespace Crankery.Emulate.Core.Intel8080
         /// <summary>
         /// Load accumulator from location.
         /// </summary>
-        [Opcode(Instruction = 0x3a, Mnemonic = "LD A,([a16])", Length = 3, Duration = 13)]
+        [Opcode(Instruction = 0x3a, Mnemonic = "LDA  [a16]", Length = 3, Duration = 13)]
         internal int LoadAccumulatorDirect(byte[] instruction)
         {
             var address = Utility.MakeWord(instruction[2], instruction[1]);

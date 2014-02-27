@@ -13,14 +13,14 @@ namespace Crankery.Emulate.Core.Intel8080
         /// Increment a register.
         /// </summary>
         /// <param name="instruction"></param>
-        [Opcode(Instruction = 0x04, Mnemonic = "INR B", Length = 1, Duration = 4)]
-        [Opcode(Instruction = 0x14, Mnemonic = "INR D", Length = 1, Duration = 4)]
-        [Opcode(Instruction = 0x24, Mnemonic = "INR H", Length = 1, Duration = 4)]
-        [Opcode(Instruction = 0x34, Mnemonic = "INR M", Length = 1, Duration = 10)]
-        [Opcode(Instruction = 0x0c, Mnemonic = "INR C", Length = 1, Duration = 4)]
-        [Opcode(Instruction = 0x1c, Mnemonic = "INR E", Length = 1, Duration = 4)]
-        [Opcode(Instruction = 0x2c, Mnemonic = "INR L", Length = 1, Duration = 4)]
-        [Opcode(Instruction = 0x3c, Mnemonic = "INR A", Length = 1, Duration = 4)]
+        [Opcode(Instruction = 0x04, Mnemonic = "INR  B", Length = 1, Duration = 4)]
+        [Opcode(Instruction = 0x14, Mnemonic = "INR  D", Length = 1, Duration = 4)]
+        [Opcode(Instruction = 0x24, Mnemonic = "INR  H", Length = 1, Duration = 4)]
+        [Opcode(Instruction = 0x34, Mnemonic = "INR  M", Length = 1, Duration = 10)]
+        [Opcode(Instruction = 0x0c, Mnemonic = "INR  C", Length = 1, Duration = 4)]
+        [Opcode(Instruction = 0x1c, Mnemonic = "INR  E", Length = 1, Duration = 4)]
+        [Opcode(Instruction = 0x2c, Mnemonic = "INR  L", Length = 1, Duration = 4)]
+        [Opcode(Instruction = 0x3c, Mnemonic = "INR  A", Length = 1, Duration = 4)]
         internal int IncrementRegister(byte[] instruction)
         {
             IncrementOrDecrementRegister(instruction, true);
@@ -32,14 +32,14 @@ namespace Crankery.Emulate.Core.Intel8080
         /// Decrement a register.
         /// </summary>
         /// <param name="instruction"></param>
-        [Opcode(Instruction = 0x05, Mnemonic = "DCR B", Length = 1, Duration = 4)]
-        [Opcode(Instruction = 0x15, Mnemonic = "DCR D", Length = 1, Duration = 4)]
-        [Opcode(Instruction = 0x25, Mnemonic = "DCR H", Length = 1, Duration = 4)]
-        [Opcode(Instruction = 0x35, Mnemonic = "DCR M", Length = 1, Duration = 10)]
-        [Opcode(Instruction = 0x0d, Mnemonic = "DCR C", Length = 1, Duration = 4)]
-        [Opcode(Instruction = 0x1d, Mnemonic = "DCR E", Length = 1, Duration = 4)]
-        [Opcode(Instruction = 0x2d, Mnemonic = "DCR L", Length = 1, Duration = 4)]
-        [Opcode(Instruction = 0x3d, Mnemonic = "DCR A", Length = 1, Duration = 4)]
+        [Opcode(Instruction = 0x05, Mnemonic = "DCR  B", Length = 1, Duration = 4)]
+        [Opcode(Instruction = 0x15, Mnemonic = "DCR  D", Length = 1, Duration = 4)]
+        [Opcode(Instruction = 0x25, Mnemonic = "DCR  H", Length = 1, Duration = 4)]
+        [Opcode(Instruction = 0x35, Mnemonic = "DCR  M", Length = 1, Duration = 10)]
+        [Opcode(Instruction = 0x0d, Mnemonic = "DCR  C", Length = 1, Duration = 4)]
+        [Opcode(Instruction = 0x1d, Mnemonic = "DCR  E", Length = 1, Duration = 4)]
+        [Opcode(Instruction = 0x2d, Mnemonic = "DCR  L", Length = 1, Duration = 4)]
+        [Opcode(Instruction = 0x3d, Mnemonic = "DCR  A", Length = 1, Duration = 4)]
         internal int DecrementRegister(byte[] instruction)
         {
             IncrementOrDecrementRegister(instruction, false);
@@ -61,7 +61,6 @@ namespace Crankery.Emulate.Core.Intel8080
 
         /// <summary>
         /// Decimal adjust accumulator.
-        /// Not implemented.
         /// </summary>
         /// <param name="instruction"></param>
         [Opcode(Instruction = 0x27, Mnemonic = "DAA", Length = 1, Duration = 4)]
@@ -92,7 +91,8 @@ namespace Crankery.Emulate.Core.Intel8080
             }
 
             // the high order digit may only get adjusted if the lower digit did.
-            // i can't really tell.
+            // i can't really tell... this seems to allow everything to function OK
+            // I really don't think anything of value was ever accomplished with this useless instruction.
             var h = a >> 4;
             if (h > 9 || registers.Flags.C || a > 0xff)
             {
@@ -130,6 +130,9 @@ namespace Crankery.Emulate.Core.Intel8080
             }
 
             registers.Flags.Update(newValue);
+
+            // I think I got this crazy formula from SIMH: http://www.schorn.ch
+            // it's repeated here wherever the alternate carry is touched.
             registers.Flags.A = (((1 ^ newValue) ^ oldValue) & 0x10) != 0;
 
             registers[register] = newValue;

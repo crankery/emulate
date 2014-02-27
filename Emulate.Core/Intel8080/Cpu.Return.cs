@@ -8,10 +8,9 @@ namespace Crankery.Emulate.Core.Intel8080
     public partial class Cpu
     {
         [Opcode(Instruction = 0xc9, Mnemonic = "RET", Length = 1, Duration = 10)]
-        //[Opcode(Instruction = 0xd9, Mnemonic = "*RET", Length = 1, Duration = 10)]
         internal int ReturnUnconditional(byte[] instruction)
         {
-            registers.ProgramCounter = Pop();
+            registers.ProgramCounter = PopWord();
 
             return 0;
         }
@@ -33,7 +32,7 @@ namespace Crankery.Emulate.Core.Intel8080
 
             if (registers.Flags[flag] == test)
             {
-                registers.ProgramCounter = Pop();
+                registers.ProgramCounter = PopWord();
 
                 // if we successfully evaluated a condition, it took 6 more cycles.
                 return 6;
