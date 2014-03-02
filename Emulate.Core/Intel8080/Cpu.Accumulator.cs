@@ -17,7 +17,7 @@ namespace Crankery.Emulate.Core.Intel8080
         [Opcode(Instruction = 0x85, Mnemonic = "ADD  L", Length = 1, Duration = 4)]
         [Opcode(Instruction = 0x86, Mnemonic = "ADD  M", Length = 1, Duration = 7)]
         [Opcode(Instruction = 0x87, Mnemonic = "ADD  A", Length = 1, Duration = 4)]
-        internal int AddToAccumulator(byte[] instruction)
+        internal int AddToAccumulator(OpcodeAttribute opcode, byte[] instruction)
         {
             var source = (Register)(instruction[0] & 7);
 
@@ -34,7 +34,7 @@ namespace Crankery.Emulate.Core.Intel8080
         [Opcode(Instruction = 0x8d, Mnemonic = "ADC  L", Length = 1, Duration = 4)]
         [Opcode(Instruction = 0x8e, Mnemonic = "ADC  M", Length = 1, Duration = 7)]
         [Opcode(Instruction = 0x8f, Mnemonic = "ADC  A", Length = 1, Duration = 4)]
-        internal int AddToAccumulatorWithCarry(byte[] instruction)
+        internal int AddToAccumulatorWithCarry(OpcodeAttribute opcode, byte[] instruction)
         {
             var source = (Register)(instruction[0] & 7);
 
@@ -51,7 +51,7 @@ namespace Crankery.Emulate.Core.Intel8080
         [Opcode(Instruction = 0x95, Mnemonic = "SUB  L", Length = 1, Duration = 4)]
         [Opcode(Instruction = 0x96, Mnemonic = "SUB  M", Length = 1, Duration = 7)]
         [Opcode(Instruction = 0x97, Mnemonic = "SUB  A", Length = 1, Duration = 4)]
-        internal int SubtractFromAccumulator(byte[] instruction)
+        internal int SubtractFromAccumulator(OpcodeAttribute opcode, byte[] instruction)
         {
             var source = (Register)(instruction[0] & 7);
 
@@ -68,7 +68,7 @@ namespace Crankery.Emulate.Core.Intel8080
         [Opcode(Instruction = 0x9d, Mnemonic = "SBB  L", Length = 1, Duration = 4)]
         [Opcode(Instruction = 0x9e, Mnemonic = "SBB  M", Length = 1, Duration = 7)]
         [Opcode(Instruction = 0x9f, Mnemonic = "SBB  A", Length = 1, Duration = 4)]
-        internal int SubtractFromAccumulatorWithBorrow(byte[] instruction)
+        internal int SubtractFromAccumulatorWithBorrow(OpcodeAttribute opcode, byte[] instruction)
         {
             var source = (Register)(instruction[0] & 7);
 
@@ -85,7 +85,7 @@ namespace Crankery.Emulate.Core.Intel8080
         [Opcode(Instruction = 0xbd, Mnemonic = "CMP  L", Length = 1, Duration = 4)]
         [Opcode(Instruction = 0xbe, Mnemonic = "CMP  M", Length = 1, Duration = 7)]
         [Opcode(Instruction = 0xbf, Mnemonic = "CMP  A", Length = 1, Duration = 4)]
-        internal int CompareAccumulator(byte[] instruction)
+        internal int CompareAccumulator(OpcodeAttribute opcode, byte[] instruction)
         {
             var source = (Register)(instruction[0] & 7);
 
@@ -103,7 +103,7 @@ namespace Crankery.Emulate.Core.Intel8080
         [Opcode(Instruction = 0xa5, Mnemonic = "ANA  L", Length = 1, Duration = 4)]
         [Opcode(Instruction = 0xa6, Mnemonic = "ANA  M", Length = 1, Duration = 7)]
         [Opcode(Instruction = 0xa7, Mnemonic = "ANA  A", Length = 1, Duration = 4)]
-        internal int AndAccumulator(byte[] instruction)
+        internal int AndAccumulator(OpcodeAttribute opcode, byte[] instruction)
         {
             var source = (Register)(instruction[0] & 7);
 
@@ -120,7 +120,7 @@ namespace Crankery.Emulate.Core.Intel8080
         [Opcode(Instruction = 0xad, Mnemonic = "XRA  L", Length = 1, Duration = 4)]
         [Opcode(Instruction = 0xae, Mnemonic = "XRA  M", Length = 1, Duration = 7)]
         [Opcode(Instruction = 0xaf, Mnemonic = "XRA  A", Length = 1, Duration = 4)]
-        internal int ExclusiveOrAccumulator(byte[] instruction)
+        internal int ExclusiveOrAccumulator(OpcodeAttribute opcode, byte[] instruction)
         {
             var source = (Register)(instruction[0] & 7);
 
@@ -137,7 +137,7 @@ namespace Crankery.Emulate.Core.Intel8080
         [Opcode(Instruction = 0xb5, Mnemonic = "ORA  L", Length = 1, Duration = 4)]
         [Opcode(Instruction = 0xb6, Mnemonic = "ORA  M", Length = 1, Duration = 7)]
         [Opcode(Instruction = 0xb7, Mnemonic = "ORA  A", Length = 1, Duration = 4)]
-        internal int OrAccumulator(byte[] instruction)
+        internal int OrAccumulator(OpcodeAttribute opcode, byte[] instruction)
         {
             var source = (Register)(instruction[0] & 7);
 

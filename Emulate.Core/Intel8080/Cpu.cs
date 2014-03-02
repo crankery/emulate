@@ -13,16 +13,16 @@ namespace Crankery.Emulate.Core.Intel8080
     using System.Reflection.Emit;
 
     /// <summary>
-    /// The main implmentation of the i8080 CPU.
+    /// The main implementation of the Intel 8080 CPU.
     /// </summary>
     public partial class Cpu : ICpu
     {
         private readonly Dictionary<byte, Operation> operations;
         private readonly Registers registers;
         private readonly byte[] fetch;
+        private readonly Action<string> writeDebugMessage;
         private bool interruptEnable;
         private bool isHalted;
-        private Action<string> writeDebugMessage;
 
         public Cpu(IMemory memory, IDevices devices)
         {
@@ -31,11 +31,10 @@ namespace Crankery.Emulate.Core.Intel8080
 
             operations = new Dictionary<byte, Operation>();
             registers = new Registers(memory);
+            fetch = new byte[3];
 
             BuildOperations();
             Reset();
-
-            fetch = new byte[3];
         }
 
         public Cpu(IMemory memory, IDevices devices, Action<string> writeDebugMessage)
@@ -178,7 +177,7 @@ namespace Crankery.Emulate.Core.Intel8080
         internal int ExecuteOperation(Operation operation, byte[] instruction)
         {
             // execute the operation & update our cycle count
-            return operation.Opcode.Duration + operation.Execute(instruction);
+            return operation.Opcode.Duration + operation.Execute(operation.Opcode, instruction);
         }
 
         internal void BuildOperations()
@@ -186,10 +185,10 @@ namespace Crankery.Emulate.Core.Intel8080
             var methodInfos = this.GetType().GetMethods(BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance);
             foreach (var methodInfo in methodInfos)
             {
-                var opcodeAttributes = methodInfo.GetCustomAttributes(typeof(OpcodeAttribute));
-                foreach (OpcodeAttribute opcodeAttribute in opcodeAttributes)
+                var opcodeAttributes = methodInfo.GetCustomAttributes<OpcodeAttribute>();
+                foreach (var opcodeAttribute in opcodeAttributes)
                 {
-                    var execute = (Func<byte[], int>)Delegate.CreateDelegate(typeof(Func<byte[], int>), this, methodInfo);
+                    var execute = (Func<OpcodeAttribute, byte[], int>)Delegate.CreateDelegate(typeof(Func<OpcodeAttribute, byte[], int>), this, methodInfo);
 
                     var operation = new Operation
                     {

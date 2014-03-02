@@ -18,7 +18,7 @@ namespace Crankery.Emulate.Core.Intel8080
         [Opcode(Instruction = 0x64, Mnemonic = "MOV  H,H", Length = 1, Duration = 5)]
         [Opcode(Instruction = 0x6d, Mnemonic = "MOV  L,L", Length = 1, Duration = 5)]
         [Opcode(Instruction = 0x7f, Mnemonic = "MOV  A,A", Length = 1, Duration = 5)]
-        internal int MoveNoOp(byte[] instruction)
+        internal int MoveNoOp(OpcodeAttribute opcode, byte[] instruction)
         {
             return 0;
         }
@@ -83,7 +83,7 @@ namespace Crankery.Emulate.Core.Intel8080
         [Opcode(Instruction = 0x7c, Mnemonic = "MOV  A,H", Length = 1, Duration = 5)]
         [Opcode(Instruction = 0x7d, Mnemonic = "MOV  A,L", Length = 1, Duration = 5)]
         [Opcode(Instruction = 0x7e, Mnemonic = "MOV  A,M", Length = 1, Duration = 7)]
-        internal int Move(byte[] instruction)
+        internal int Move(OpcodeAttribute opcode, byte[] instruction)
         {
             var source = (Register)(instruction[0] & 7);
             var target = (Register)((instruction[0] >> 3) & 7);
@@ -99,7 +99,7 @@ namespace Crankery.Emulate.Core.Intel8080
         /// <param name="instruction"></param>
         [Opcode(Instruction = 0x02, Mnemonic = "STAX B", Length = 1, Duration = 7)]
         [Opcode(Instruction = 0x12, Mnemonic = "STAX D", Length = 1, Duration = 7)]
-        internal int StoreAccumulator(byte[] instruction)
+        internal int StoreAccumulator(OpcodeAttribute opcode, byte[] instruction)
         {
             var location = instruction[0] == 0x02 ? registers.BC : registers.DE;
 
@@ -114,7 +114,7 @@ namespace Crankery.Emulate.Core.Intel8080
         /// <param name="instruction"></param>
         [Opcode(Instruction = 0x0a, Mnemonic = "LDAX B", Length = 1, Duration = 7)]
         [Opcode(Instruction = 0x1a, Mnemonic = "LDAX D", Length = 1, Duration = 7)]
-        internal int LoadAccumulator(byte[] instruction)
+        internal int LoadAccumulator(OpcodeAttribute opcode, byte[] instruction)
         {
             var location = instruction[0] == 0x0a ? registers.BC : registers.DE;
 

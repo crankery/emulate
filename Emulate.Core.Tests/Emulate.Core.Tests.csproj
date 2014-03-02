@@ -40,6 +40,7 @@
     <Compile Include="Intel8080\CpuDiagFixture.cs" />
     <Compile Include="Intel8080\HelloWorldFixture.cs" />
     <Compile Include="Intel8080\MockDevices.cs" />
+    <Compile Include="Mos6502\FunctionalTestFixture.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -58,11 +59,15 @@
     <None Include="Intel8080\HelloWorld.hex">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="Mos6502\6502_functional_test.bin">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Intel8080\cpudiag.asm" />
     <Content Include="Intel8080\cpudiag.txt" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

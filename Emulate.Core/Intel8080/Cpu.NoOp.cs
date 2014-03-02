@@ -8,7 +8,7 @@ namespace Crankery.Emulate.Core.Intel8080
     public partial class Cpu
     {
         [Opcode(Instruction = 0x00, Mnemonic = "NOP", Length = 1, Duration = 4)]
-        internal int NoOp(byte[] instruction)
+        internal int NoOperation(OpcodeAttribute opcode, byte[] instruction)
         {
             return 0;
         }

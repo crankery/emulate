@@ -8,7 +8,7 @@ namespace Crankery.Emulate.Core.Intel8080
     public partial class Cpu
     {
         [Opcode(Instruction = 0x07, Mnemonic = "RLC", Length = 1, Duration = 4)]
-        internal int RotateAccumulatorLeftThroughCarry(byte[] instruction)
+        internal int RotateAccumulatorLeftThroughCarry(OpcodeAttribute opcode, byte[] instruction)
         {
             var c = registers.A >> 7;
             registers.Flags.C = c != 0;
@@ -18,7 +18,7 @@ namespace Crankery.Emulate.Core.Intel8080
         }
 
         [Opcode(Instruction = 0x0f, Mnemonic = "RRC", Length = 1, Duration = 4)]
-        internal int RotateAccumulatorRightThroughCarry(byte[] instruction)
+        internal int RotateAccumulatorRightThroughCarry(OpcodeAttribute opcode, byte[] instruction)
         {
             var c = (registers.A & 1) << 7;
             registers.Flags.C = c != 0;
@@ -28,7 +28,7 @@ namespace Crankery.Emulate.Core.Intel8080
         }
 
         [Opcode(Instruction = 0x17, Mnemonic = "RAL", Length = 1, Duration = 4)]
-        internal int RotateAccumulatorLeft(byte[] instruction)
+        internal int RotateAccumulatorLeft(OpcodeAttribute opcode, byte[] instruction)
         {
             var c = registers.Flags.C ? 1 : 0;
             registers.Flags.C = (registers.A & 0x80) != 0;
@@ -38,7 +38,7 @@ namespace Crankery.Emulate.Core.Intel8080
         }
 
         [Opcode(Instruction = 0x1f, Mnemonic = "RAR", Length = 1, Duration = 4)]
-        internal int RotateAccumulatorRight(byte[] instruction)
+        internal int RotateAccumulatorRight(OpcodeAttribute opcode, byte[] instruction)
         {
             var c = registers.Flags.C ? 0x80 : 0;
             registers.Flags.C = (registers.A & 1) != 0;

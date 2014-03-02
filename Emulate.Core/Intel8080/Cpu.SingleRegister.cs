@@ -21,7 +21,7 @@ namespace Crankery.Emulate.Core.Intel8080
         [Opcode(Instruction = 0x1c, Mnemonic = "INR  E", Length = 1, Duration = 4)]
         [Opcode(Instruction = 0x2c, Mnemonic = "INR  L", Length = 1, Duration = 4)]
         [Opcode(Instruction = 0x3c, Mnemonic = "INR  A", Length = 1, Duration = 4)]
-        internal int IncrementRegister(byte[] instruction)
+        internal int IncrementRegister(OpcodeAttribute opcode, byte[] instruction)
         {
             IncrementOrDecrementRegister(instruction, true);
 
@@ -40,7 +40,7 @@ namespace Crankery.Emulate.Core.Intel8080
         [Opcode(Instruction = 0x1d, Mnemonic = "DCR  E", Length = 1, Duration = 4)]
         [Opcode(Instruction = 0x2d, Mnemonic = "DCR  L", Length = 1, Duration = 4)]
         [Opcode(Instruction = 0x3d, Mnemonic = "DCR  A", Length = 1, Duration = 4)]
-        internal int DecrementRegister(byte[] instruction)
+        internal int DecrementRegister(OpcodeAttribute opcode, byte[] instruction)
         {
             IncrementOrDecrementRegister(instruction, false);
 
@@ -52,7 +52,7 @@ namespace Crankery.Emulate.Core.Intel8080
         /// </summary>
         /// <param name="instruction"></param>
         [Opcode(Instruction = 0x2f, Mnemonic = "CMA", Length = 1, Duration = 4)]
-        internal int ComplementAccumulator(byte[] instruction)
+        internal int ComplementAccumulator(OpcodeAttribute opcode, byte[] instruction)
         {
             registers.A ^= (byte)0xff;
 
@@ -64,7 +64,7 @@ namespace Crankery.Emulate.Core.Intel8080
         /// </summary>
         /// <param name="instruction"></param>
         [Opcode(Instruction = 0x27, Mnemonic = "DAA", Length = 1, Duration = 4)]
-        internal int DecimalAdjustAccumulator(byte[] instruction)
+        internal int DecimalAdjustAccumulator(OpcodeAttribute opcode, byte[] instruction)
         {
             // http://www.motherboardpoint.com/8080-daa-opcode-t163192.html
             // (1) If the least significant four bits of the accumulator represent a

@@ -9,8 +9,8 @@ namespace Crankery.Emulate.Core.Intel8080
 
     public partial class Cpu
     {
-        [Opcode(Instruction = 0xcd, Mnemonic = "CALL  [a16]", Length = 3, Duration = 17)]
-        internal int CallUnconditional(byte[] instruction)
+        [Opcode(Instruction = 0xcd, Mnemonic = "CALL  [a16]H", Length = 3, Duration = 17)]
+        internal int CallUnconditional(OpcodeAttribute opcode, byte[] instruction)
         {
             var address = Utility.MakeWord(instruction[2], instruction[1]);
 
@@ -20,15 +20,15 @@ namespace Crankery.Emulate.Core.Intel8080
             return 0;
         }
 
-        [Opcode(Instruction = 0xc4, Mnemonic = "CNZ  [a16]", Length = 3, Duration = 11)]
-        [Opcode(Instruction = 0xcc, Mnemonic = "CZ   [a16]", Length = 3, Duration = 11)]
-        [Opcode(Instruction = 0xd4, Mnemonic = "CNC  [a16]", Length = 3, Duration = 11)]
-        [Opcode(Instruction = 0xdc, Mnemonic = "CC   [a16]", Length = 3, Duration = 11)]
-        [Opcode(Instruction = 0xe4, Mnemonic = "CPO  [a16]", Length = 3, Duration = 11)]
-        [Opcode(Instruction = 0xec, Mnemonic = "CPE  [a16]", Length = 3, Duration = 11)]
-        [Opcode(Instruction = 0xf4, Mnemonic = "CP   [a16]", Length = 3, Duration = 11)]
-        [Opcode(Instruction = 0xfc, Mnemonic = "CM   [a16]", Length = 3, Duration = 11)]
-        internal int CallConditional(byte[] instruction)
+        [Opcode(Instruction = 0xc4, Mnemonic = "CNZ  [a16]H", Length = 3, Duration = 11)]
+        [Opcode(Instruction = 0xcc, Mnemonic = "CZ   [a16]H", Length = 3, Duration = 11)]
+        [Opcode(Instruction = 0xd4, Mnemonic = "CNC  [a16]H", Length = 3, Duration = 11)]
+        [Opcode(Instruction = 0xdc, Mnemonic = "CC   [a16]H", Length = 3, Duration = 11)]
+        [Opcode(Instruction = 0xe4, Mnemonic = "CPO  [a16]H", Length = 3, Duration = 11)]
+        [Opcode(Instruction = 0xec, Mnemonic = "CPE  [a16]H", Length = 3, Duration = 11)]
+        [Opcode(Instruction = 0xf4, Mnemonic = "CP   [a16]H", Length = 3, Duration = 11)]
+        [Opcode(Instruction = 0xfc, Mnemonic = "CM   [a16]H", Length = 3, Duration = 11)]
+        internal int CallConditional(OpcodeAttribute opcode, byte[] instruction)
         {
             // instruction encodes the flag from 0..3 in bits 4 & 5
             // instruction encodes the test (true or false) in bit 3.
@@ -57,7 +57,7 @@ namespace Crankery.Emulate.Core.Intel8080
         [Opcode(Instruction = 0xef, Mnemonic = "RST  5", Length = 1, Duration = 11)]
         [Opcode(Instruction = 0xf7, Mnemonic = "RST  6", Length = 1, Duration = 11)]
         [Opcode(Instruction = 0xff, Mnemonic = "RST  7", Length = 1, Duration = 11)]
-        internal int CallSubroutine(byte[] instruction)
+        internal int CallSubroutine(OpcodeAttribute opcode, byte[] instruction)
         {
             PushWord(registers.ProgramCounter);
 

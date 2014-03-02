@@ -8,7 +8,7 @@ namespace Crankery.Emulate.Core.Intel8080
     public partial class Cpu
     {
         [Opcode(Instruction = 0x76, Mnemonic = "HLT", Length = 1, Duration = 7)]
-        internal int Halt(byte[] instruction)
+        internal int Halt(OpcodeAttribute opcode, byte[] instruction)
         {
             IsHalted = true;
 

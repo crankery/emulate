@@ -8,7 +8,7 @@ namespace Crankery.Emulate.Core.Intel8080
     public partial class Cpu
     {
         [Opcode(Instruction = 0xc9, Mnemonic = "RET", Length = 1, Duration = 10)]
-        internal int ReturnUnconditional(byte[] instruction)
+        internal int ReturnUnconditional(OpcodeAttribute opcode, byte[] instruction)
         {
             registers.ProgramCounter = PopWord();
 
@@ -23,7 +23,7 @@ namespace Crankery.Emulate.Core.Intel8080
         [Opcode(Instruction = 0xe8, Mnemonic = "RPE", Length = 1, Duration = 5)]
         [Opcode(Instruction = 0xf0, Mnemonic = "RP", Length = 1, Duration = 5)]
         [Opcode(Instruction = 0xf8, Mnemonic = "RM", Length = 1, Duration = 5)]
-        internal int ReturnConditional(byte[] instruction)
+        internal int ReturnConditional(OpcodeAttribute opcode, byte[] instruction)
         {
             // instruction encodes the flag from 0..3 in bits 4 & 5
             // instruction encodes the test (true or false) in bit 3.

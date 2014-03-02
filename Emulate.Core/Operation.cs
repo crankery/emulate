@@ -9,8 +9,8 @@ namespace Crankery.Emulate.Core
 
     public class Operation
     {
-        public Func<byte[], int> Execute { get; set; }
-       
+        public Func<OpcodeAttribute, byte[], int> Execute { get; set; }
+
         public OpcodeAttribute Opcode { get; set; }
     }
 }

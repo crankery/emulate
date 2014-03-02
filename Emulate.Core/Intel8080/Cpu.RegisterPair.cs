@@ -11,7 +11,7 @@ namespace Crankery.Emulate.Core.Intel8080
         [Opcode(Instruction = 0x13, Mnemonic = "INC  D", Length = 1, Duration = 6)]
         [Opcode(Instruction = 0x23, Mnemonic = "INC  H", Length = 1, Duration = 6)]
         [Opcode(Instruction = 0x33, Mnemonic = "INC  SP", Length = 1, Duration = 6)]
-        internal int IncrementRegisterPair(byte[] instruction)
+        internal int IncrementRegisterPair(OpcodeAttribute opcode, byte[] instruction)
         {
             var pair = (RegisterPair)((instruction[0] >> 4) & 3);
 
@@ -24,7 +24,7 @@ namespace Crankery.Emulate.Core.Intel8080
         [Opcode(Instruction = 0x1b, Mnemonic = "DEC  D", Length = 1, Duration = 5)]
         [Opcode(Instruction = 0x2b, Mnemonic = "DEC  H", Length = 1, Duration = 5)]
         [Opcode(Instruction = 0x3b, Mnemonic = "DEC  SP", Length = 1, Duration = 5)]
-        internal int DecrementRegisterPair(byte[] instruction)
+        internal int DecrementRegisterPair(OpcodeAttribute opcode, byte[] instruction)
         {
             var pair = (RegisterPair)((instruction[0] >> 4) & 3);
 
@@ -37,7 +37,7 @@ namespace Crankery.Emulate.Core.Intel8080
         [Opcode(Instruction = 0x19, Mnemonic = "DAD  D", Length = 1, Duration = 11)]
         [Opcode(Instruction = 0x29, Mnemonic = "DAD  H", Length = 1, Duration = 11)]
         [Opcode(Instruction = 0x39, Mnemonic = "DAD  SP", Length = 1, Duration = 11)]
-        internal int DoubleAddRegisterPair(byte[] instruction)
+        internal int DoubleAddRegisterPair(OpcodeAttribute opcode, byte[] instruction)
         {
             var pair = (RegisterPair)((instruction[0] >> 4) & 3);
 
@@ -47,7 +47,7 @@ namespace Crankery.Emulate.Core.Intel8080
         }
 
         [Opcode(Instruction = 0xeb, Mnemonic = "XCHG", Length = 1, Duration = 4)]
-        internal int ExchangeDEAndHL(byte[] instruction)
+        internal int ExchangeDEAndHL(OpcodeAttribute opcode, byte[] instruction)
         {
             var x = registers.DE;
             registers.DE = registers.HL;
@@ -57,7 +57,7 @@ namespace Crankery.Emulate.Core.Intel8080
         }
 
         [Opcode(Instruction = 0xe3, Mnemonic = "XTHL", Length = 1, Duration = 18)]
-        internal int ExhangeSPAndHL(byte[] instruction)
+        internal int ExhangeSPAndHL(OpcodeAttribute opcode, byte[] instruction)
         {
             var x = Memory.ReadWord(registers.StackPointer);
             Memory.Write(registers.StackPointer, registers.HL);
@@ -67,7 +67,7 @@ namespace Crankery.Emulate.Core.Intel8080
         }
 
         [Opcode(Instruction = 0xf9, Mnemonic = "SPHL", Length = 1, Duration = 5)]
-        internal int LoadStackPointerHL(byte[] instruction)
+        internal int LoadStackPointerHL(OpcodeAttribute opcode, byte[] instruction)
         {
             registers.StackPointer = registers.HL;
 

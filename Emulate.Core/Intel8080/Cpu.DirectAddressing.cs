@@ -10,8 +10,8 @@ namespace Crankery.Emulate.Core.Intel8080
         /// <summary>
         /// Store accumulator at location.
         /// </summary>
-        [Opcode(Instruction = 0x32, Mnemonic = "STA  [a16]", Length = 3, Duration = 13)]
-        internal int StoreAccumulatorDirect(byte[] instruction)
+        [Opcode(Instruction = 0x32, Mnemonic = "STA  [a16]H", Length = 3, Duration = 13)]
+        internal int StoreAccumulatorDirect(OpcodeAttribute opcode, byte[] instruction)
         {
             var address = Utility.MakeWord(instruction[2], instruction[1]);
             Memory.Write(address, registers.A);
@@ -22,8 +22,8 @@ namespace Crankery.Emulate.Core.Intel8080
         /// <summary>
         /// Load accumulator from location.
         /// </summary>
-        [Opcode(Instruction = 0x3a, Mnemonic = "LDA  [a16]", Length = 3, Duration = 13)]
-        internal int LoadAccumulatorDirect(byte[] instruction)
+        [Opcode(Instruction = 0x3a, Mnemonic = "LDA  [a16]H", Length = 3, Duration = 13)]
+        internal int LoadAccumulatorDirect(OpcodeAttribute opcode, byte[] instruction)
         {
             var address = Utility.MakeWord(instruction[2], instruction[1]);
             registers.A = Memory.Read(address);
@@ -34,8 +34,8 @@ namespace Crankery.Emulate.Core.Intel8080
         /// <summary>
         /// Load HL from direct address.
         /// </summary>
-        [Opcode(Instruction = 0x2a, Mnemonic = "LHLD [a16]", Length = 3, Duration = 16)]
-        internal int LoadHLDirect(byte[] instruction)
+        [Opcode(Instruction = 0x2a, Mnemonic = "LHLD [a16]H", Length = 3, Duration = 16)]
+        internal int LoadHLDirect(OpcodeAttribute opcode, byte[] instruction)
         {
             var address = Utility.MakeWord(instruction[2], instruction[1]);
             registers.L = Memory.Read(address);
@@ -47,8 +47,8 @@ namespace Crankery.Emulate.Core.Intel8080
         /// <summary>
         /// Store HL to direct address.
         /// </summary>
-        [Opcode(Instruction = 0x22, Mnemonic = "SHLD [a16]", Length = 3, Duration = 16)]
-        internal int StoreHLDirect(byte[] instruction)
+        [Opcode(Instruction = 0x22, Mnemonic = "SHLD [a16]H", Length = 3, Duration = 16)]
+        internal int StoreHLDirect(OpcodeAttribute opcode, byte[] instruction)
         {
             var address = Utility.MakeWord(instruction[2], instruction[1]);
             Memory.Write(address, registers.L);
