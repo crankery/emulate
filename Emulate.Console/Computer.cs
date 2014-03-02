@@ -14,7 +14,7 @@ namespace Crankery.Emulate.Console
         // 2 MHz CPU
         public const ulong CpuFrequency = 2000000;
 
-        private ManualResetEvent stop;
+        private ManualResetEvent attention;
         private Thread bgThread;
 
         public Computer()
@@ -41,30 +41,42 @@ namespace Crankery.Emulate.Console
 
         public void Start()
         {
-            stop = new ManualResetEvent(false);
+            attention = new ManualResetEvent(false);
 
-            bgThread = new Thread(Execute);
+            bgThread = new Thread(Run);
             bgThread.Start();
         }
 
         public void Stop()
         {
-            stop.Set();
+            attention.Set();
             bgThread.Join();
+
+            Disk.Load(0, null);
         }
 
-        private void Execute()
+        public void Reset()
         {
-            Disk.Load(0, File.ReadAllBytes(@"Resources\Disks\mbasic.dsk"));
-            Disk.Load(1, File.ReadAllBytes(@"Resources\Disks\altcpm.dsk"));
+            Stop();
+            Start();
+        }
+
+        private void Run()
+        {
+            Disk.Load(0, File.ReadAllBytes(@"Resources\Disks\cpm.dsk"));
+            Disk.Load(1, File.ReadAllBytes(@"Resources\Disks\altdos2.dsk"));
             Memory.Load(File.ReadAllBytes(@"Resources\Roms\dbl.bin"), 0xff00);
 
             Cpu.Reset();
             Cpu.ProgramCounter = 0xff00;
 
             ExecuteUntilHalt();
+        }
 
-            Disk.Load(0, null);
+        private void ResetAndContinue()
+        {
+            Cpu.Reset();
+            ExecuteUntilHalt();
         }
 
         private void SimpleExecuteUntilHalt()
@@ -91,7 +103,7 @@ namespace Crankery.Emulate.Console
                     {
                         if (Cpu.IsHalted)
                         {
-                            stop.Set();
+                            attention.Set();
                         }
                         else
                         {
@@ -109,7 +121,7 @@ namespace Crankery.Emulate.Console
                 0,
                 interval);
 
-            stop.WaitOne();
+            attention.WaitOne();
 
             timer.Change(Timeout.Infinite, Timeout.Infinite);
             timer.Dispose();
