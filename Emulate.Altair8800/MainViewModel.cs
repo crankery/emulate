@@ -1,5 +1,4 @@
-﻿
-namespace Crankery.Emulate.Console
+﻿namespace Crankery.Emulate.Altair8800
 {
     using System;
     using System.Windows.Input;

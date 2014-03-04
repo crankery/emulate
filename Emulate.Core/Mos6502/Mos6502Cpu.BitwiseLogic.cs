@@ -65,13 +65,13 @@ namespace Crankery.Emulate.Core.Mos6502
         [OpcodeEx(Instruction = 0x1e, Mnemonic = "ASL [a16],X", Length = 3, Duration = 7, AddressingMode = AddressingMode.AbsoluteX)]
         internal int ArithmeticShiftLeft(OpcodeExAttribute opcode, byte[] instruction)
         {
-            var value = GetMemory(opcode.AddressingMode, Fetch);
-            registers.Flags.C = (value & 0x80) != 0;
-            value <<= 1;
+            var m = GetMemory(opcode.AddressingMode, Fetch);
+            registers.Flags.C = (m & 0x80) != 0;
+            m <<= 1;
 
-            SetMemory(opcode.AddressingMode, Fetch, value);
-            registers.Flags.N = (value & 0x80) != 0;
-            registers.Flags.Z = value == 0;
+            SetMemory(opcode.AddressingMode, Fetch, m);
+            registers.Flags.N = (m & 0x80) != 0;
+            registers.Flags.Z = m == 0;
 
             return 0;
         }
@@ -83,13 +83,13 @@ namespace Crankery.Emulate.Core.Mos6502
         [OpcodeEx(Instruction = 0x5e, Mnemonic = "LSR [a16],X", Length = 3, Duration = 7, AddressingMode = AddressingMode.AbsoluteX)]
         internal int LogicalShiftRight(OpcodeExAttribute opcode, byte[] instruction)
         {
-            var value = GetMemory(opcode.AddressingMode, Fetch);
-            registers.Flags.C = (value & 0x1) != 0;
-            value >>= 1;
+            var m = GetMemory(opcode.AddressingMode, Fetch);
+            registers.Flags.C = (m & 0x1) != 0;
+            m >>= 1;
 
-            SetMemory(opcode.AddressingMode, Fetch, value);
+            SetMemory(opcode.AddressingMode, Fetch, m);
             registers.Flags.N = false;
-            registers.Flags.Z = value == 0;
+            registers.Flags.Z = m == 0;
 
             return 0;
         }
@@ -101,16 +101,16 @@ namespace Crankery.Emulate.Core.Mos6502
         [OpcodeEx(Instruction = 0x3e, Mnemonic = "ROL [a16],X", Length = 3, Duration = 7, AddressingMode = AddressingMode.AbsoluteX)]
         internal int RotateLeft(OpcodeExAttribute opcode, byte[] instruction)
         {
-            var value = GetMemory(opcode.AddressingMode, Fetch);
+            var m = GetMemory(opcode.AddressingMode, Fetch);
             var c = (byte)(registers.Flags.C ? 0x1 : 0x0);
-            registers.Flags.C = (value & 0x80) != 0;
+            registers.Flags.C = (m & 0x80) != 0;
 
-            value <<= 1;
-            value |= c;
+            m <<= 1;
+            m |= c;
 
-            SetMemory(opcode.AddressingMode, Fetch, value);
-            registers.Flags.N = (value & 0x80) != 0;
-            registers.Flags.Z = value == 0;
+            SetMemory(opcode.AddressingMode, Fetch, m);
+            registers.Flags.N = (m & 0x80) != 0;
+            registers.Flags.Z = m == 0;
 
             return 0;
         }
@@ -122,16 +122,16 @@ namespace Crankery.Emulate.Core.Mos6502
         [OpcodeEx(Instruction = 0x7e, Mnemonic = "ROR [a16],X", Length = 3, Duration = 7, AddressingMode = AddressingMode.AbsoluteX)]
         internal int RotateRight(OpcodeExAttribute opcode, byte[] instruction)
         {
-            var value = GetMemory(opcode.AddressingMode, Fetch);
+            var m = GetMemory(opcode.AddressingMode, Fetch);
             var c = (byte)(registers.Flags.C ? 0x80 : 0x00);
-            registers.Flags.C = (value & 0x1) != 0;
+            registers.Flags.C = (m & 0x1) != 0;
 
-            value >>= 1;
-            value |= c;
+            m >>= 1;
+            m |= c;
 
-            SetMemory(opcode.AddressingMode, Fetch, value);
-            registers.Flags.N = (value & 0x80) != 0;
-            registers.Flags.Z = value == 0;
+            SetMemory(opcode.AddressingMode, Fetch, m);
+            registers.Flags.N = (m & 0x80) != 0;
+            registers.Flags.Z = m == 0;
 
             return 0;
         }
@@ -140,12 +140,16 @@ namespace Crankery.Emulate.Core.Mos6502
         [OpcodeEx(Instruction = 0x2c, Mnemonic = "BIT [a16]", Length = 3, Duration = 3, AddressingMode = AddressingMode.Absolute)]
         internal int TestBits(OpcodeExAttribute opcode, byte[] instruction)
         {
-            var value = GetMemory(opcode.AddressingMode, Fetch);
+            var m = GetMemory(opcode.AddressingMode, Fetch);
 
-            registers.Flags.N = (value & 0x80) != 0; // copy bit 7 from memory to N
-            registers.Flags.V = (value & 0x40) != 0; // copy bit 6 from memory to V
-            registers.Flags.Z = (value & registers.A) == 0; // the result of the AND is zero?
+            // update the Z flag based on the the value ANDed with the accumulator equals zero.
+            registers.Flags.Z = (m & registers.A) == 0;
 
+            // copy the N and V flags from the value to the flag register.
+            var f = (Flag)m;
+            registers.Flags.N = f.HasFlag(Flag.N); 
+            registers.Flags.V = f.HasFlag(Flag.V);
+            
             return 0;
         }
 

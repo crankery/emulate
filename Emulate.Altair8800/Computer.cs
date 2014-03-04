@@ -1,5 +1,5 @@
 ﻿
-namespace Crankery.Emulate.Console
+namespace Crankery.Emulate.Altair8800
 {
     using Crankery.Emulate.Core;
     using Crankery.Emulate.Core.Intel8080;

@@ -14,7 +14,7 @@
         /// http://2m5.de/6502_Emu/index.htm
         /// </summary>
         [TestMethod]
-        public void FunctionalTestPasses()
+        public void Mos6502_FunctionalTestFixture_Passes()
         {
             var cpu = new Mos6502Cpu(new Memory());
             var root = Path.GetDirectoryName(Assembly.GetExecutingAssembly().CodeBase).Replace(@"file:\", string.Empty);

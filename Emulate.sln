@@ -7,12 +7,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Emulate.Core", "Emulate.Cor
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Emulate.Core.Tests", "Emulate.Core.Tests\Emulate.Core.Tests.csproj", "{48B2583F-A85B-4447-9E01-27ADA77D894C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Emulate.Console", "Emulate.Console\Emulate.Console.csproj", "{4A64F44D-AAC9-4394-94AE-724E4078E9A3}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{02D86DD0-59F5-4B28-8588-6218ED2F01CE}"
 	ProjectSection(SolutionItems) = preProject
 		README.md = README.md
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Emulate.Altair8800", "Emulate.Altair8800\Emulate.Altair8800.csproj", "{4A64F44D-AAC9-4394-94AE-724E4078E9A3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

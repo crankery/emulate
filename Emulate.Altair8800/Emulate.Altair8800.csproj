@@ -7,8 +7,8 @@
     <ProjectGuid>{4A64F44D-AAC9-4394-94AE-724E4078E9A3}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Crankery.Emulate.Console</RootNamespace>
-    <AssemblyName>Crankery.Emulate.Console</AssemblyName>
+    <RootNamespace>Crankery.Emulate.Altair8800</RootNamespace>
+    <AssemblyName>Altair8800</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>

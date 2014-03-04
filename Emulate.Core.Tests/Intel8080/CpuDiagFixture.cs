@@ -9,7 +9,7 @@
     public class CpuDiagFixture
     {
         [TestMethod]
-        public void CpuDiagPasses()
+        public void Intel8080_CpuDiagFixture_Passes()
         {
             var cpu = new Intel8080Cpu(new Memory(), new MockDevices());
             var root = Path.GetDirectoryName(Assembly.GetExecutingAssembly().CodeBase).Replace(@"file:\", string.Empty);

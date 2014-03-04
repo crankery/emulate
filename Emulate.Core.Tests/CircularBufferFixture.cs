@@ -7,7 +7,7 @@ namespace Crankery.Emulate.Core.Tests
     public class CircularBufferFixture
     {
         [TestMethod]
-        public void CanStoreLessThanCapacity()
+        public void CircularBufferFixture_CanStoreLessThanCapacity()
         {
             var sut = new CircularBuffer<string>(10);
 
@@ -18,7 +18,7 @@ namespace Crankery.Emulate.Core.Tests
         }
 
         [TestMethod]
-        public void CanStoreCapacityValues()
+        public void CircularBufferFixture_CanStoreCapacityValues()
         {
             var count = 10;
             var items = 10;
@@ -36,7 +36,7 @@ namespace Crankery.Emulate.Core.Tests
         }
 
         [TestMethod]
-        public void StoresLastNValues()
+        public void CircularBufferFixture_StoresLastNValues()
         {
             var count = 10;
             var items = 95;

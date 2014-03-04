@@ -1,4 +1,4 @@
-﻿namespace Crankery.Emulate.Console
+﻿namespace Crankery.Emulate.Altair8800
 {
     using System.ComponentModel;
 

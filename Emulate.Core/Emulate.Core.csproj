@@ -50,7 +50,6 @@
     <Compile Include="HexLoad.cs" />
     <Compile Include="Cpu.cs" />
     <Compile Include="Intel8080\Flag.cs" />
-    <Compile Include="IState.cs" />
     <Compile Include="WriteLogMessage.cs" />
     <Compile Include="Memory.cs" />
     <Compile Include="Intel8080\InputPort.cs" />

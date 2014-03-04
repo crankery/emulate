@@ -51,24 +51,5 @@ namespace Crankery.Emulate.Core.Mos6502
         {
             return new State(opcode, Fetch, registers, originalProgramCounter);
         }
-
-        internal void Trap(ushort vector, bool software)
-        {
-            // exit the halted state (this is artificial anyway)
-            IsHalted = false;
-
-            if (vector != ResetVector)
-            {
-                // push the program counter
-                Push(ProgramCounter.GetHigh());
-                Push(ProgramCounter.GetLow());
-                PushProcessorStatusWord(software);
-
-                registers.Flags.I = true;
-            }
-
-            // continue executing at the address stored in the specefied vector.
-            ProgramCounter = Memory.ReadWord(vector);
-        }
     }
 }
