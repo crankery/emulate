@@ -7,4 +7,3 @@ The Console project is a start at emulating the IMSAI 8800. It isn't complete bu
 I've tried to give credit to the others who figured out the tricky details in code comments.
 
 Dave.
-hamiltonjdavid@yahoo.com
