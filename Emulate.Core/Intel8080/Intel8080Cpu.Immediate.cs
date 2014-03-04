@@ -1,11 +1,11 @@
-﻿// <copyright file="Cpu.Immediate.cs" company="Crankery">
+﻿// <copyright file="Intel8080Cpu.Immediate.cs" company="Crankery">
 // Copyright (c) 2014 All Rights Reserved
 // </copyright>
 // <author>Dave Hamilton</author>
 
 namespace Crankery.Emulate.Core.Intel8080
 {
-    public partial class Cpu
+    public partial class Intel8080Cpu
     {
         [Opcode(Instruction = 0x01, Mnemonic = "LXI  B,[a16]H", Length = 3, Duration = 10)]
         [Opcode(Instruction = 0x11, Mnemonic = "LXI  D,[a16]H", Length = 3, Duration = 10)]

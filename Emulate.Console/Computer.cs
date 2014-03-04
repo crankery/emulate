@@ -21,7 +21,7 @@ namespace Crankery.Emulate.Console
         {
             Memory = new Memory();
             Devices = new Devices();
-            Cpu = new Cpu(Memory, Devices);
+            Cpu = new Intel8080Cpu(Memory, Devices);
             SerialInputOutput = new SerialInputOutput(Devices);
             Disk = new Disk(Devices);
             FrontPanel = new FrontPanel(Devices);
@@ -33,7 +33,7 @@ namespace Crankery.Emulate.Console
 
         public FrontPanel FrontPanel { get; private set; }
 
-        private Cpu Cpu { get; set; }
+        private Intel8080Cpu Cpu { get; set; }
 
         private Memory Memory { get; set; }
 

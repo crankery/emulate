@@ -11,7 +11,7 @@
         [TestMethod]
         public void CpuDiagPasses()
         {
-            var cpu = new Cpu(new Memory(), new MockDevices());
+            var cpu = new Intel8080Cpu(new Memory(), new MockDevices());
             var root = Path.GetDirectoryName(Assembly.GetExecutingAssembly().CodeBase).Replace(@"file:\", string.Empty);
             cpu.Memory.Load(File.ReadAllBytes(@"Intel8080\cpudiag.bin"), 0x100);
             

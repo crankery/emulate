@@ -59,6 +59,7 @@
     <None Include="Intel8080\HelloWorld.hex">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="Mos6502\6502_functional_test.a65" />
     <None Include="Mos6502\6502_functional_test.bin">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

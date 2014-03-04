@@ -7,10 +7,10 @@ namespace Crankery.Emulate.Core
 {
     using System;
 
-    public class Operation
+    public class Operation<TOpcode> where TOpcode : OpcodeAttribute
     {
-        public Func<OpcodeAttribute, byte[], int> Execute { get; set; }
+        public Func<TOpcode, byte[], int> Execute { get; set; }
 
-        public OpcodeAttribute Opcode { get; set; }
+        public TOpcode Opcode { get; set; }
     }
 }

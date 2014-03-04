@@ -1,11 +1,11 @@
-﻿// <copyright file="Cpu.CarrryBit.cs" company="Crankery">
+﻿// <copyright file="Intel8080Cpu.CarrryBit.cs" company="Crankery">
 // Copyright (c) 2014 All Rights Reserved
 // </copyright>
 // <author>Dave Hamilton</author>
 
 namespace Crankery.Emulate.Core.Intel8080
 {
-    public partial class Cpu
+    public partial class Intel8080Cpu
     {
         /// <summary>
         /// Complement the carry.

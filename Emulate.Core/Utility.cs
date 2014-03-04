@@ -3,9 +3,10 @@
 // </copyright>
 // <author>Dave Hamilton</author>
 
-using System;
 namespace Crankery.Emulate.Core
 {
+    using System;
+
     public static class Utility
     {
         public static bool IsNegative(this byte value)

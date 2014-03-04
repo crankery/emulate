@@ -1,11 +1,11 @@
-﻿// <copyright file="Cpu.RegisterPair.cs" company="Crankery">
+﻿// <copyright file="Intel8080Cpu.RegisterPair.cs" company="Crankery">
 // Copyright (c) 2014 All Rights Reserved
 // </copyright>
 // <author>Dave Hamilton</author>
 
 namespace Crankery.Emulate.Core.Intel8080
 {
-    public partial class Cpu
+    public partial class Intel8080Cpu
     {
         [Opcode(Instruction = 0x03, Mnemonic = "INC  B", Length = 1, Duration = 6)]
         [Opcode(Instruction = 0x13, Mnemonic = "INC  D", Length = 1, Duration = 6)]

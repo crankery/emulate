@@ -5,7 +5,25 @@
 
 namespace Crankery.Emulate.Core
 {
+    using System.Linq;
     using System.Collections.Generic;
+
+    public class CircularBuffer
+        : CircularBuffer<object>
+    {
+        public CircularBuffer(int capacity)
+            : base(capacity)
+        {
+        }
+
+        public IEnumerable<string> Strings
+        {
+            get
+            {
+                return Values.Select(x => x.ToString());
+            }
+        }
+    }
 
     public class CircularBuffer<T>
     {

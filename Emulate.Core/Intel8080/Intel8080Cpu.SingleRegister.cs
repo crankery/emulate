@@ -1,4 +1,4 @@
-﻿// <copyright file="Cpu.SingleRegister.cs" company="Crankery">
+﻿// <copyright file="Intel8080Cpu.SingleRegister.cs" company="Crankery">
 // Copyright (c) 2014 All Rights Reserved
 // </copyright>
 // <author>Dave Hamilton</author>
@@ -7,7 +7,7 @@ namespace Crankery.Emulate.Core.Intel8080
 {
     using System;
 
-    public partial class Cpu
+    public partial class Intel8080Cpu
     {
         /// <summary>
         /// Increment a register.

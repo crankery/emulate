@@ -12,9 +12,10 @@ namespace Crankery.Emulate.Core.Mos6502
     {
         C = 1 << 0, // Carry
         Z = 1 << 1, // Zero
-        I = 1 << 2, // IRQ
+        I = 1 << 2, // IRQ disable
         D = 1 << 3, // BCD
         B = 1 << 4, // Break
+        Reserved = 1 << 5, // reserved.
         V = 1 << 6, // Overflow
         N = 1 << 7, // Negative
     }

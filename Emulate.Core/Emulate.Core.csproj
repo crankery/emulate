@@ -44,24 +44,28 @@
   <ItemGroup>
     <Compile Include="BinLoad.cs" />
     <Compile Include="CircularBuffer.cs" />
+    <Compile Include="CpuAttribute.cs" />
+    <Compile Include="Endian.cs" />
     <Compile Include="Intel8080\State.cs" />
     <Compile Include="HexLoad.cs" />
-    <Compile Include="ICpu.cs" />
+    <Compile Include="Cpu.cs" />
     <Compile Include="Intel8080\Flag.cs" />
+    <Compile Include="IState.cs" />
+    <Compile Include="WriteLogMessage.cs" />
     <Compile Include="Memory.cs" />
     <Compile Include="Intel8080\InputPort.cs" />
     <Compile Include="Intel8080\OutputPort.cs" />
     <Compile Include="Intel8080\Port.cs" />
     <Compile Include="Mos6502\AddressingMode.cs" />
-    <Compile Include="Mos6502\Cpu.YRegister.cs" />
+    <Compile Include="Mos6502\Mos6502Cpu.YRegister.cs" />
     <Compile Include="Mos6502\OpcodeExAttribute.cs" />
-    <Compile Include="Mos6502\Cpu.Artithmetic.cs" />
-    <Compile Include="Mos6502\Cpu.BitwiseLogic.cs" />
-    <Compile Include="Mos6502\Cpu.cs" />
-    <Compile Include="Mos6502\Cpu.FlowControl.cs" />
-    <Compile Include="Mos6502\Cpu.XRegister.cs" />
-    <Compile Include="Mos6502\Cpu.Misc.cs" />
-    <Compile Include="Mos6502\Cpu.Stack.cs" />
+    <Compile Include="Mos6502\Mos6502Cpu.Artithmetic.cs" />
+    <Compile Include="Mos6502\Mos6502Cpu.BitwiseLogic.cs" />
+    <Compile Include="Mos6502\Mos6502Cpu.cs" />
+    <Compile Include="Mos6502\Mos6502Cpu.FlowControl.cs" />
+    <Compile Include="Mos6502\Mos6502Cpu.XRegister.cs" />
+    <Compile Include="Mos6502\Mos6502Cpu.Misc.cs" />
+    <Compile Include="Mos6502\Mos6502Cpu.Stack.cs" />
     <Compile Include="Mos6502\Flag.cs" />
     <Compile Include="Mos6502\Flags.cs" />
     <Compile Include="Mos6502\Registers.cs" />
@@ -69,24 +73,24 @@
     <Compile Include="Utility.cs" />
     <Compile Include="ByteParity.cs" />
     <Compile Include="Intel8080\Flags.cs" />
-    <Compile Include="Intel8080\Cpu.Call.cs" />
-    <Compile Include="Intel8080\Cpu.DataTransfer.cs" />
+    <Compile Include="Intel8080\Intel8080Cpu.Call.cs" />
+    <Compile Include="Intel8080\Intel8080Cpu.DataTransfer.cs" />
     <Compile Include="Intel8080\IDevices.cs" />
     <Compile Include="IMemory.cs" />
-    <Compile Include="Intel8080\Cpu.CarryBit.cs" />
-    <Compile Include="Intel8080\Cpu.cs" />
-    <Compile Include="Intel8080\Cpu.DirectAddressing.cs" />
-    <Compile Include="Intel8080\Cpu.Halt.cs" />
-    <Compile Include="Intel8080\Cpu.Immediate.cs" />
-    <Compile Include="Intel8080\Cpu.InputOutput.cs" />
-    <Compile Include="Intel8080\Cpu.Interrupt.cs" />
-    <Compile Include="Intel8080\Cpu.Jump.cs" />
-    <Compile Include="Intel8080\Cpu.NoOp.cs" />
-    <Compile Include="Intel8080\Cpu.RegisterPair.cs" />
-    <Compile Include="Intel8080\Cpu.Stack.cs" />
-    <Compile Include="Intel8080\Cpu.Return.cs" />
-    <Compile Include="Intel8080\Cpu.RotateAccumulator.cs" />
-    <Compile Include="Intel8080\Cpu.SingleRegister.cs" />
+    <Compile Include="Intel8080\Intel8080Cpu.CarryBit.cs" />
+    <Compile Include="Intel8080\Intel8080Cpu.cs" />
+    <Compile Include="Intel8080\Intel8080Cpu.DirectAddressing.cs" />
+    <Compile Include="Intel8080\Intel8080Cpu.Halt.cs" />
+    <Compile Include="Intel8080\Intel8080Cpu.Immediate.cs" />
+    <Compile Include="Intel8080\Intel8080Cpu.InputOutput.cs" />
+    <Compile Include="Intel8080\Intel8080Cpu.Interrupt.cs" />
+    <Compile Include="Intel8080\Intel8080Cpu.Jump.cs" />
+    <Compile Include="Intel8080\Intel8080Cpu.NoOp.cs" />
+    <Compile Include="Intel8080\Intel8080Cpu.RegisterPair.cs" />
+    <Compile Include="Intel8080\Intel8080Cpu.Stack.cs" />
+    <Compile Include="Intel8080\Intel8080Cpu.Return.cs" />
+    <Compile Include="Intel8080\Intel8080Cpu.RotateAccumulator.cs" />
+    <Compile Include="Intel8080\Intel8080Cpu.SingleRegister.cs" />
     <Compile Include="OpcodeAttribute.cs" />
     <Compile Include="Operation.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -95,13 +99,13 @@
     <Compile Include="Intel8080\Registers.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Intel8080\Cpu.Accumulator.cs" />
+    <Compile Include="Intel8080\Intel8080Cpu.Accumulator.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Mos6502\Cpu.Accumulator.cs" />
+    <Compile Include="Mos6502\Mos6502Cpu.Accumulator.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Mos6502\Cpu.Addressing.cs" />
+    <Compile Include="Mos6502\Mos6502Cpu.Addressing.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

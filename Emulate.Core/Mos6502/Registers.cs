@@ -7,9 +7,19 @@ namespace Crankery.Emulate.Core.Mos6502
 {
     public class Registers
     {
-        public Registers(IMemory memory)
+        public Registers()
         {
             Flags = new Flags();
+        }
+
+        public Registers(Registers registers)
+        {
+            Flags = new Flags(registers.Flags);
+            A = registers.A;
+            X = registers.X;
+            Y = registers.Y;
+            ProgramCounter = registers.ProgramCounter;
+            StackPointer = registers.StackPointer;
         }
 
         public ushort ProgramCounter { get; set; }

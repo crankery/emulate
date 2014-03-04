@@ -1,11 +1,11 @@
-﻿// <copyright file="Cpu.RotateAccumulator.cs" company="Crankery">
+﻿// <copyright file="Intel8080Cpu.RotateAccumulator.cs" company="Crankery">
 // Copyright (c) 2014 All Rights Reserved
 // </copyright>
 // <author>Dave Hamilton</author>
 
 namespace Crankery.Emulate.Core.Intel8080
 {
-    public partial class Cpu
+    public partial class Intel8080Cpu
     {
         [Opcode(Instruction = 0x07, Mnemonic = "RLC", Length = 1, Duration = 4)]
         internal int RotateAccumulatorLeftThroughCarry(OpcodeAttribute opcode, byte[] instruction)

@@ -27,6 +27,7 @@ namespace Crankery.Emulate.Core.Intel8080
 
         public Registers(Registers registers)
         {
+            memory = registers.memory;
             Flags = new Flags(registers.Flags);
             A = registers.A;
             B = registers.B;

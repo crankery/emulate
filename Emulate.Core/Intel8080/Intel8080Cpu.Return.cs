@@ -1,11 +1,11 @@
-﻿// <copyright file="Cpu.Return.cs" company="Crankery">
+﻿// <copyright file="Intel8080Cpu.Return.cs" company="Crankery">
 // Copyright (c) 2014 All Rights Reserved
 // </copyright>
 // <author>Dave Hamilton</author>
 
 namespace Crankery.Emulate.Core.Intel8080
 {
-    public partial class Cpu
+    public partial class Intel8080Cpu
     {
         [Opcode(Instruction = 0xc9, Mnemonic = "RET", Length = 1, Duration = 10)]
         internal int ReturnUnconditional(OpcodeAttribute opcode, byte[] instruction)

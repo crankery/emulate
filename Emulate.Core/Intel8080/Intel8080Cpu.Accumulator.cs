@@ -1,4 +1,4 @@
-﻿// <copyright file="Cpu.Accumulator.cs" company="Crankery">
+﻿// <copyright file="Intel8080Cpu.Accumulator.cs" company="Crankery">
 // Copyright (c) 2014 All Rights Reserved
 // </copyright>
 // <author>Dave Hamilton</author>
@@ -7,7 +7,7 @@ namespace Crankery.Emulate.Core.Intel8080
 {
     using System;
 
-    public partial class Cpu
+    public partial class Intel8080Cpu
     {
         [Opcode(Instruction = 0x80, Mnemonic = "ADD  B", Length = 1, Duration = 4)]
         [Opcode(Instruction = 0x81, Mnemonic = "ADD  C", Length = 1, Duration = 4)]
@@ -21,7 +21,7 @@ namespace Crankery.Emulate.Core.Intel8080
         {
             var source = (Register)(instruction[0] & 7);
 
-            registers.A = AddByte(source, false);
+            registers.A = AddByteToAccumulator(source, false);
 
             return 0;
         }
@@ -38,7 +38,7 @@ namespace Crankery.Emulate.Core.Intel8080
         {
             var source = (Register)(instruction[0] & 7);
 
-            registers.A = AddByte(source, true);
+            registers.A = AddByteToAccumulator(source, true);
         
             return 0;
         }
@@ -55,7 +55,7 @@ namespace Crankery.Emulate.Core.Intel8080
         {
             var source = (Register)(instruction[0] & 7);
 
-            registers.A = SubtractByte(source, false);
+            registers.A = SubtractByteFromAccumulator(source, false);
 
             return 0;
         }
@@ -72,7 +72,7 @@ namespace Crankery.Emulate.Core.Intel8080
         {
             var source = (Register)(instruction[0] & 7);
 
-            registers.A = SubtractByte(source, true);
+            registers.A = SubtractByteFromAccumulator(source, true);
 
             return 0;
         }
@@ -90,7 +90,7 @@ namespace Crankery.Emulate.Core.Intel8080
             var source = (Register)(instruction[0] & 7);
 
 			// ignore the output of this (it goes nowhere for CMP)
-            SubtractByte(source, false);
+            SubtractByteFromAccumulator(source, false);
 
             return 0;
         }
@@ -146,12 +146,12 @@ namespace Crankery.Emulate.Core.Intel8080
             return 0;
         }
 
-        private byte AddByte(Register source, bool withCarry)
+        private byte AddByteToAccumulator(Register source, bool withCarry)
         {
             return AddBytes(registers.A, registers[source], withCarry);
         }
 
-        private byte SubtractByte(Register source, bool withBorrow)
+        private byte SubtractByteFromAccumulator(Register source, bool withBorrow)
         {
             return SubtractBytes(registers.A, registers[source], withBorrow);
         }

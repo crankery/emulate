@@ -13,7 +13,7 @@ namespace Crankery.Emulate.Core.Tests.Intel8080
         public void HelloWorldSaysHi()
         {
             var devices = new MockDevices();
-            var machine = new Cpu(new Memory(), devices);
+            var machine = new Intel8080Cpu(new Memory(), devices);
             var root = Path.GetDirectoryName(Assembly.GetExecutingAssembly().CodeBase).Replace(@"file:\", string.Empty);
             var lines = File.ReadAllLines(Path.Combine(root, @"Intel8080\HelloWorld.hex"));
             machine.Memory.Load(lines);

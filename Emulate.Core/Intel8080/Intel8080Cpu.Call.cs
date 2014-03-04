@@ -1,4 +1,4 @@
-﻿// <copyright file="Cpu.Call.cs" company="Crankery">
+﻿// <copyright file="Intel8080Cpu.Call.cs" company="Crankery">
 // Copyright (c) 2014 All Rights Reserved
 // </copyright>
 // <author>Dave Hamilton</author>
@@ -7,7 +7,7 @@ namespace Crankery.Emulate.Core.Intel8080
 {
     using System;
 
-    public partial class Cpu
+    public partial class Intel8080Cpu
     {
         [Opcode(Instruction = 0xcd, Mnemonic = "CALL  [a16]H", Length = 3, Duration = 17)]
         internal int CallUnconditional(OpcodeAttribute opcode, byte[] instruction)

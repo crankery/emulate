@@ -1,11 +1,11 @@
-﻿// <copyright file="Cpu.Stack.cs" company="Crankery">
+﻿// <copyright file="Intel8080Cpu.Stack.cs" company="Crankery">
 // Copyright (c) 2014 All Rights Reserved
 // </copyright>
 // <author>Dave Hamilton</author>
 
 namespace Crankery.Emulate.Core.Intel8080
 {
-    public partial class Cpu
+    public partial class Intel8080Cpu
     {
         [Opcode(Instruction = 0xc5, Mnemonic = "PUSH B", Length = 1, Duration = 11)]
         internal int PushBC(OpcodeAttribute opcode, byte[] instruction)
