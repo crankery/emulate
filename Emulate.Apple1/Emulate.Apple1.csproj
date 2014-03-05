@@ -117,9 +117,6 @@
     <None Include="Resources\APPLE-A4.BIN">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Resources\apple1.rom">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
     <None Include="Resources\apple1.vid">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
