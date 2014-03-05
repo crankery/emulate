@@ -1,4 +1,4 @@
-﻿namespace Crankery.Emulate.Altair8800
+﻿namespace Crankery.Emulate.Common
 {
     using System.Windows.Input;
 
@@ -8,6 +8,11 @@
     /// </summary>
     public static class KeyTranslate
     {
+        /// <summary>
+        /// Translates the specified key.
+        /// </summary>
+        /// <param name="key">The key.</param>
+        /// <returns>The decoded value.</returns>
         public static byte? Translate(Key key)
         {
             var caps = Keyboard.IsKeyToggled(Key.CapsLock);
@@ -18,6 +23,15 @@
             return Translate(key, caps, shift, control, alt);
         }
 
+        /// <summary>
+        /// Translates the specified key.
+        /// </summary>
+        /// <param name="key">The key.</param>
+        /// <param name="caps">if set to <c>true</c> caps lock was pressed.</param>
+        /// <param name="shift">if set to <c>true</c> shift was pressed.</param>
+        /// <param name="control">if set to <c>true</c> control was pressed.</param>
+        /// <param name="alt">if set to <c>true</c> alt was pressed.</param>
+        /// <returns>The decoded value.</returns>
         public static byte? Translate(Key key, bool caps, bool shift, bool control, bool alt)
         {
             // this has to move to the Terminal class.

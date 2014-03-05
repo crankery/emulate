@@ -178,7 +178,7 @@ namespace Crankery.Emulate.Core.Mos6502
         {
             get
             {
-                switch(flag)
+                switch (flag)
                 {
                     case Flag.C:
                         return C;
@@ -199,7 +199,7 @@ namespace Crankery.Emulate.Core.Mos6502
                         return N;
 
                     default:
-                        throw new NotImplementedException();
+                        return false;
                 }
             }
 

@@ -6,8 +6,6 @@
 namespace Crankery.Emulate.Core.Intel8080
 {
     using System;
-    using System.Collections.Generic;
-    using System.Reflection;
 
     /// <summary>
     /// The main implementation of the Intel 8080 CPU.

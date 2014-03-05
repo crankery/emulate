@@ -1,8 +1,8 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System.Linq;
-
-namespace Crankery.Emulate.Core.Tests
+﻿namespace Crankery.Emulate.Core.Tests
 {
+    using System.Linq;
+    using Microsoft.VisualStudio.TestTools.UnitTesting;
+
     [TestClass]
     public class CircularBufferFixture
     {

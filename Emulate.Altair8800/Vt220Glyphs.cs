@@ -3,29 +3,25 @@
     using System.IO;
     using System.Windows.Media;
     using System.Windows.Media.Imaging;
+    using Crankery.Emulate.Common;
 
-    public class Glyphs
+    /// <summary>
+    /// Terminal glyphs.
+    /// </summary>
+    public class Vt220Glyphs : Glyphs
     {
-        public const int Width = 10;
-        public const int Height = 20;
         private readonly static Color Foreground = Colors.White;
         private readonly static Color Background = Colors.Black;
-        
-        private readonly WriteableBitmap[] glyphs = new WriteableBitmap[256];
-        
-        public Glyphs()
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Glyphs"/> class.
+        /// </summary>
+        public Vt220Glyphs()
+            : base(10, 20)
         {
             // via http://www.vt100.net/dec/vt220/glyphs
             // thanks Paul Williams for explaining this. :)
             ExtractGlyphs(@"Resources\vt220-rom-separated.png");
-        }
-
-        public WriteableBitmap this[byte c]
-        {
-            get
-            {
-                return glyphs[c];
-            }
         }
 
         private void ExtractGlyphs(string imagePath)
@@ -57,9 +53,9 @@
                         // the render bitmaps are 10x20 (double high, scan lines)
                         // any pixels set in col[7] are repeated in cols 8 & 9 for line drawing.
 
-                        var glyph = BitmapFactory.New(10, 20);
+                        var glyph = BitmapFactory.New(Width, Height);
                         glyph.Clear(Background);
-                        glyphs[row + col * 16] = glyph;
+                        this[(byte)(row + col * 16)] = glyph;
 
                         for (int y = 0; y < 10; y++)
                         {
@@ -89,9 +85,9 @@
                 // swap 0 & ' '
                 // the space character is upside down question mark for some reason.
                 // while the space lives happily at zero
-                var space = glyphs[' '];
-                glyphs[' '] = glyphs[0];
-                glyphs[0] = space;
+                var space = this[(byte)' '];
+                this[(byte)' '] = this[0];
+                this[0] = space;
             }
         }
     }

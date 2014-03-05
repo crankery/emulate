@@ -1,11 +1,10 @@
-﻿using Crankery.Emulate.Core.Intel8080;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
-using System.IO;
-using System.Reflection;
-
-namespace Crankery.Emulate.Core.Tests.Intel8080
+﻿namespace Crankery.Emulate.Core.Tests.Intel8080
 {
+    using System.IO;
+    using System.Reflection;
+    using Crankery.Emulate.Core.Intel8080;
+    using Microsoft.VisualStudio.TestTools.UnitTesting;
+
     [TestClass]
     public class HelloWorldFixture
     {

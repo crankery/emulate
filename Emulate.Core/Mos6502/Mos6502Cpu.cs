@@ -5,10 +5,6 @@
 
 namespace Crankery.Emulate.Core.Mos6502
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Reflection;
-
     /// <summary>
     /// The main implementation of the MOS Technology 6502 CPU
     /// </summary>

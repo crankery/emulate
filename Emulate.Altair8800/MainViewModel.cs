@@ -3,35 +3,43 @@
     using System;
     using System.Windows.Input;
     using System.Windows.Threading;
+    using Crankery.Emulate.Common;
 
+    /// <summary>
+    /// The main view/model.
+    /// </summary>
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1001:TypesThatOwnDisposableFieldsShouldBeDisposable")]
     public class MainViewModel : ViewModel
     {
-        private readonly Computer computer;
-        private readonly Terminal terminal;
         private readonly Dispatcher dispatcher;
         private readonly ICommand reset;
+        private Computer computer;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MainViewModel"/> class.
+        /// </summary>
+        /// <param name="dispatcher">The dispatcher.</param>
         public MainViewModel(Dispatcher dispatcher)
         {
             this.dispatcher = dispatcher;
 
             computer = new Computer();
-            terminal = new Terminal();
+            Terminal = new Terminal(80, 24, new Vt220Glyphs());
             
             // show bytes sent to the serial i/o to the display 
             computer.SerialInputOutput.Send +=
                 (s, e) =>
                 {
                     dispatcher.InvokeAsync(
-                        (Action)(() => terminal.DisplayCharacter(e)));
+                        () => Terminal.DisplayCharacter(e.Value));
                 };
 
             // send keypresses to the serial i/o
-            terminal.KeyPressed +=
+            Terminal.KeyPressed +=
                 (s, e) =>
                 {
                     dispatcher.InvokeAsync(
-                        (Action)(() => computer.SerialInputOutput.Receive(e)));
+                        () => computer.SerialInputOutput.Receive(e.Value));
                 };
 
             reset = new DelegateCommand(() => computer.Reset());
@@ -39,14 +47,24 @@
             computer.Start();
         }
 
+        /// <summary>
+        /// Gets the terminal.
+        /// </summary>
+        /// <value>
+        /// The terminal.
+        /// </value>
         public Terminal Terminal
         {
-            get
-            {
-                return terminal;
-            }
+            get;
+            private set;
         }
 
+        /// <summary>
+        /// Gets the reset.
+        /// </summary>
+        /// <value>
+        /// The reset.
+        /// </value>
         public ICommand Reset
         {
             get
@@ -55,6 +73,9 @@
             }
         }
 
+        /// <summary>
+        /// Shutdowns this instance.
+        /// </summary>
         public void Shutdown()
         {
             computer.Stop();

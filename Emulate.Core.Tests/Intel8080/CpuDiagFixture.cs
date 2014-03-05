@@ -2,8 +2,8 @@
 {
     using System.IO;
     using System.Reflection;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
     using Crankery.Emulate.Core.Intel8080;
+    using Microsoft.VisualStudio.TestTools.UnitTesting;
     
     [TestClass]
     public class CpuDiagFixture

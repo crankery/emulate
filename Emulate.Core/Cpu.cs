@@ -14,7 +14,9 @@ namespace Crankery.Emulate.Core
         private readonly Dictionary<byte, Operation<TOpcode>> operations = new Dictionary<byte, Operation<TOpcode>>();
         private readonly byte[] fetch = new byte[3];
 
-        public event WriteLogMessage WriteLogMessage;
+        public delegate void WriteMessage(object sender, WriteMessageEventArgs e);
+
+        public event WriteMessage WriteLogMessage;
 
         protected Cpu(IMemory memory)
         {
@@ -130,7 +132,7 @@ namespace Crankery.Emulate.Core
         {
             if (WriteLogMessage != null)
             {
-                WriteLogMessage(this, GetLogMessage(opcode, originalProgramCounter));
+                WriteLogMessage(this, new WriteMessageEventArgs { Message = GetLogMessage(opcode, originalProgramCounter) });
             }
         }
 
@@ -138,7 +140,7 @@ namespace Crankery.Emulate.Core
         {
             if (WriteLogMessage != null)
             {
-                WriteLogMessage(this, message);
+                WriteLogMessage(this, new WriteMessageEventArgs { Message = message });
             }
         }
     }

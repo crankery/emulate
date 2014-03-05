@@ -5,6 +5,9 @@
 
 namespace Crankery.Emulate.Core
 {
+    /// <summary>
+    /// Load a binary file at a location in memory.
+    /// </summary>
     public static class BinLoad
     {
         public static void Load(this IMemory memory, byte[] bytes, ushort address)

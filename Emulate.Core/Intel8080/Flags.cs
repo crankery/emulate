@@ -91,7 +91,7 @@ namespace Crankery.Emulate.Core.Intel8080
                         return S;
                 }
 
-                throw new NotImplementedException();
+                return false;
             }
 
             set
@@ -113,9 +113,6 @@ namespace Crankery.Emulate.Core.Intel8080
                     case Flag.S:
                         S = value;
                         break;
-
-                    default:
-                        throw new NotImplementedException();
                 }
             }
         }

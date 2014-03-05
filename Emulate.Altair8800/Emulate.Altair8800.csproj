@@ -22,6 +22,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
+    <RunCodeAnalysis>true</RunCodeAnalysis>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -32,6 +33,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
+    <RunCodeAnalysis>true</RunCodeAnalysis>
   </PropertyGroup>
   <PropertyGroup>
     <StartupObject />
@@ -55,7 +57,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Computer.cs" />
-    <Compile Include="DelegateCommand.cs" />
     <Compile Include="Devices.cs" />
     <Compile Include="Disk.cs" />
     <Compile Include="DriveControl.cs" />
@@ -63,11 +64,7 @@
     <Compile Include="FrontPanel.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Glyphs.cs" />
-    <Compile Include="Terminal.xaml.cs">
-      <DependentUpon>Terminal.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="KeyTranslate.cs" />
+    <Compile Include="Vt220Glyphs.cs" />
     <Compile Include="MainView.xaml.cs">
       <DependentUpon>MainView.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -76,7 +73,6 @@
     <Compile Include="SerialInputOutput.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Disks\altcpm.dsk">
@@ -119,6 +115,10 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Emulate.Common\Emulate.Common.csproj">
+      <Project>{51df8f8b-b897-4c47-8839-e11609b1dc69}</Project>
+      <Name>Emulate.Common</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Emulate.Core\Emulate.Core.csproj">
       <Project>{85cd0c12-5daf-4a6a-8026-b32eb2255605}</Project>
       <Name>Emulate.Core</Name>
@@ -131,10 +131,6 @@
   </ItemGroup>
   <ItemGroup>
     <Page Include="MainView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Terminal.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

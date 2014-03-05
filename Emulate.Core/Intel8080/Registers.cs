@@ -155,7 +155,7 @@ namespace Crankery.Emulate.Core.Intel8080
                     case RegisterPair.AF:
                         return Utility.MakeWord(A, Flags.Combined);
                     default:
-                        throw new ApplicationException("Unknown pair: " + pair);
+                        return 0x0;
                 }
             }
 
@@ -213,7 +213,7 @@ namespace Crankery.Emulate.Core.Intel8080
                     case Register.M:
                         return memory.Read(HL);
                     default:
-                        throw new ApplicationException("Unknown register: " + register);
+                        return 0x0;
                 }
             }
 

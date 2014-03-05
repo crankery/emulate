@@ -1,4 +1,4 @@
-﻿namespace Crankery.Emulate.Altair8800
+﻿namespace Crankery.Emulate.Common
 {
     using System;
     using System.ComponentModel;
@@ -17,15 +17,13 @@
     /// </summary>
     public partial class Terminal : UserControl
     {
-        private const int DisplayWidth = 80;
-        private const int DisplayHeight = 24;
-        private const int CharacterWidth = Glyphs.Width;
-        private const int CharacterHeight = Glyphs.Height;
         private const int BorderWidth = 4;
         private static readonly Color DisplayBackground = Colors.Black;
 
+        private readonly int displayWidth;
+        private readonly int displayHeight;
         private readonly WriteableBitmap display;
-        private readonly byte[] cells = new byte[DisplayWidth * DisplayHeight];
+        private readonly byte[] cells;
         private readonly Glyphs glyphs;
 
         private int x;
@@ -35,24 +33,31 @@
         private bool showCursor;
         private bool hideCursor;
 
-        public delegate void KeyPressedEvent(object sender, byte code);
+        /// <summary>
+        /// Occurs when a key is pressed.
+        /// </summary>
+        public event SendByteEventArgs.SendByteEvent KeyPressed = delegate { };
 
-        public event KeyPressedEvent KeyPressed = delegate { };
-
-        public Terminal()
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Terminal" /> class.
+        /// </summary>
+        public Terminal(int displayWidth, int displayHeight, Glyphs glyphs)
         {
             InitializeComponent();
 
-            display = BitmapFactory.New(DisplayWidth * CharacterWidth + BorderWidth * 2, DisplayHeight * CharacterHeight + BorderWidth * 2);
+            this.displayWidth = displayWidth;
+            this.displayHeight = displayHeight;
+            this.glyphs = glyphs;
+
+            cells = new byte[displayWidth * displayHeight];
+            display = BitmapFactory.New(displayWidth * glyphs.Width + BorderWidth * 2, displayHeight * glyphs.Height + BorderWidth * 2);
             display.Clear(DisplayBackground);
 
             DisplayImage.Source = display;
 
             if (!DesignerProperties.GetIsInDesignMode(this))
             {
-                glyphs = new Glyphs();
-
-                ClearRange(0, 0, DisplayWidth - 1, DisplayHeight - 1);
+                ClearRange(0, 0, displayWidth - 1, displayHeight - 1);
             
                 var timer = new DispatcherTimer
                 {
@@ -68,6 +73,12 @@
             }
         }
 
+        /// <summary>
+        /// Gets the x.
+        /// </summary>
+        /// <value>
+        /// The x.
+        /// </value>
         public int X
         {
             get
@@ -79,7 +90,7 @@
             {
                 x = value;
 
-                if (x >= DisplayWidth)
+                if (x >= displayWidth)
                 {
                     // move down to the start of the next line.
                     x = 0;
@@ -88,12 +99,18 @@
 
                 if (x < 0)
                 {
-                    x = DisplayWidth - 1;
+                    x = displayWidth - 1;
                     Y--;
                 }
             }
         }
 
+        /// <summary>
+        /// Gets the y.
+        /// </summary>
+        /// <value>
+        /// The y.
+        /// </value>
         public int Y
         {
             get
@@ -105,9 +122,9 @@
             {
                 y = value;
 
-                if (y >= DisplayHeight)
+                if (y >= displayHeight)
                 {
-                    y = DisplayHeight - 1;
+                    y = displayHeight - 1;
                     Scroll();
                 }
 
@@ -117,6 +134,7 @@
                 }
             }
         }
+
         private bool ShowCursor
         {
             get
@@ -145,6 +163,10 @@
             }
         }
 
+        /// <summary>
+        /// Displays the character.
+        /// </summary>
+        /// <param name="c">The character.</param>
         public void DisplayCharacter(byte c)
         {
             lock (this)
@@ -188,24 +210,24 @@
             if (showCursor && !hideCursor && DisplayImage.IsFocused)
             {
                 display.FillRectangle(
-                   CharacterWidth * x + BorderWidth,
-                   CharacterHeight * (y + 1) - 3 + BorderWidth,
-                   CharacterWidth * (x + 1) - 1 + BorderWidth,
-                   CharacterHeight * (y + 1) - 1 + BorderWidth,
+                   glyphs.Width * x + BorderWidth,
+                   glyphs.Height * (y + 1) - 3 + BorderWidth,
+                   glyphs.Width * (x + 1) - 1 + BorderWidth,
+                   glyphs.Height * (y + 1) - 1 + BorderWidth,
                    Colors.White);
 
                 display.Blit(
-                    new Rect(CharacterWidth * x + BorderWidth, CharacterHeight * y + BorderWidth, CharacterWidth, CharacterHeight),
-                    glyphs[cells[y * DisplayWidth + x]],
-                    new Rect(0, 0, CharacterWidth, CharacterHeight),
+                    new Rect(glyphs.Width * x + BorderWidth, glyphs.Height * y + BorderWidth, glyphs.Width, glyphs.Height),
+                    glyphs[cells[y * displayWidth + x]],
+                    new Rect(0, 0, glyphs.Width, glyphs.Height),
                     WriteableBitmapExtensions.BlendMode.Additive);
             }
             else
             {
                 display.Blit(
-                    new Rect(CharacterWidth * x + BorderWidth, CharacterHeight * y + BorderWidth, CharacterWidth, CharacterHeight),
-                    glyphs[cells[y * DisplayWidth + x]],
-                    new Rect(0, 0, CharacterWidth, CharacterHeight),
+                    new Rect(glyphs.Width * x + BorderWidth, glyphs.Height * y + BorderWidth, glyphs.Width, glyphs.Height),
+                    glyphs[cells[y * displayWidth + x]],
+                    new Rect(0, 0, glyphs.Width, glyphs.Height),
                     WriteableBitmapExtensions.BlendMode.None);
             }
         }
@@ -268,11 +290,11 @@
                 return;
             }
 
-            //if(_vt52Mode && (escape=="D" || escape=="H")) escape += "_";
+            ////if(_vt52Mode && (escape=="D" || escape=="H")) escape += "_";
 
             var args = escapeArgs.Split(';');
-            int? arg0 = args.Length > 0 && args[0] != "" ? int.Parse(args[0]) : (int?)null;
-            int? arg1 = args.Length > 1 && args[1] != "" ? int.Parse(args[1]) : (int?)null;
+            int? arg0 = args.Length > 0 && args[0] != string.Empty ? int.Parse(args[0]) : (int?)null;
+            int? arg1 = args.Length > 1 && args[1] != string.Empty ? int.Parse(args[1]) : (int?)null;
 
             switch (escape)
             {
@@ -300,37 +322,37 @@
                     X = Math.Max(arg1 ?? 1, 1) - 1;
                     break;
 
-                //case "M": 
-                //    PriorRowWithScroll(); 
-                //    break;
-                //case "D_": 
-                //    NextRowWithScroll(); 
-                //    break;
-                //case "E": 
-                //    NextRowWithScroll();
-                //    X = 0; 
-                //    break;
+                ////case "M": 
+                ////    PriorRowWithScroll(); 
+                ////    break;
+                ////case "D_": 
+                ////    NextRowWithScroll(); 
+                ////    break;
+                ////case "E": 
+                ////    NextRowWithScroll();
+                ////    X = 0; 
+                ////    break;
 
-                //case "[r":
-                //    _scrollTop = (arg0 ?? 1) - 1; 
-                //    _scrollBottom = (arg0 ?? _height); 
-                //    break;
+                ////case "[r":
+                ////    _scrollTop = (arg0 ?? 1) - 1; 
+                ////    _scrollBottom = (arg0 ?? _height); 
+                ////    break;
 
-                //case "H": if (!_tabStops.Contains(Column)) _tabStops.Add(Column); break;
-                //case "g": if (arg0 == 3) _tabStops.Clear(); else _tabStops.Remove(Column); break;
+                ////case "H": if (!_tabStops.Contains(Column)) _tabStops.Add(Column); break;
+                ////case "g": if (arg0 == 3) _tabStops.Clear(); else _tabStops.Remove(Column); break;
 
                 case "[J":
                 case "J":
                     switch (arg0 ?? 0)
                     {
                         case 0:
-                            ClearRange(x, y, DisplayWidth, DisplayHeight);
+                            ClearRange(x, y, displayWidth, displayHeight);
                             break;
                         case 1:
                             ClearRange(0, 0, X + 1, Y);
                             break;
                         case 2:
-                            ClearRange(0, 0, DisplayWidth, DisplayHeight);
+                            ClearRange(0, 0, displayWidth, displayHeight);
                             break;
                     }
                     break;
@@ -339,87 +361,87 @@
                     switch (arg0 ?? 0)
                     {
                         case 0:
-                            ClearRange(X, Y, DisplayWidth, Y);
+                            ClearRange(X, Y, displayWidth, Y);
                             break;
                         case 1:
                             ClearRange(0, Y, X + 1, Y);
                             break;
                         case 2:
-                            ClearRange(0, Y, DisplayWidth, Y);
+                            ClearRange(0, Y, displayWidth, Y);
                             break;
                     }
                     break;
 
-                //case "?l":
-                //case "?h":
-                //    var h = escape == "?h";
-                //    switch (arg0)
-                //    {
-                //        case 2: _vt52Mode = h; break;
-                //        case 3: Width = h ? 132 : 80; ResetBuffer(); break;
-                //        case 7: _autoWrapMode = h; break;
-                //    }
-                //    break;
-                //case "<": _vt52Mode = false; break;
+                ////case "?l":
+                ////case "?h":
+                ////    var h = escape == "?h";
+                ////    switch (arg0)
+                ////    {
+                ////        case 2: _vt52Mode = h; break;
+                ////        case 3: Width = h ? 132 : 80; ResetBuffer(); break;
+                ////        case 7: _autoWrapMode = h; break;
+                ////    }
+                ////    break;
+                ////case "<": _vt52Mode = false; break;
 
-                //case "m":
-                //    if (args.Length == 0)
-                //    {
-                //        ResetCharacterModes();
-                //    }
+                ////case "m":
+                ////    if (args.Length == 0)
+                ////    {
+                ////        ResetCharacterModes();
+                ////    }
 
-                //    foreach (var arg in args)
-                //        switch (arg)
-                //        {
-                //            case "0": ResetCharacterModes(); break;
-                //            case "1": _boldMode = true; break;
-                //            case "2": _lowMode = true; break;
-                //            case "4": _underlineMode = true; break;
-                //            case "5": _blinkMode = true; break;
-                //            case "7": _reverseMode = true; break;
-                //            case "8": _invisibleMode = true; break;
-                //        }
-                //    UpdateBrushes();
-                //    break;
+                ////    foreach (var arg in args)
+                ////        switch (arg)
+                ////        {
+                ////            case "0": ResetCharacterModes(); break;
+                ////            case "1": _boldMode = true; break;
+                ////            case "2": _lowMode = true; break;
+                ////            case "4": _underlineMode = true; break;
+                ////            case "5": _blinkMode = true; break;
+                ////            case "7": _reverseMode = true; break;
+                ////            case "8": _invisibleMode = true; break;
+                ////        }
+                ////    UpdateBrushes();
+                ////    break;
 
-                //case "#3":
-                //case "#4":
-                //case "#5":
-                //case "#6":
-                //    _doubleMode = (CharacterDoubling)((int)escape[1] - (int)'0');
-                //    break;
+                ////case "#3":
+                ////case "#4":
+                ////case "#5":
+                ////case "#6":
+                ////    _doubleMode = (CharacterDoubling)((int)escape[1] - (int)'0');
+                ////    break;
 
-                //case "[s": _saveRow = Row; _saveColumn = Column; break;
-                //case "7": _saveRow = Row; _saveColumn = Column;
-                //    _saveboldMode = _boldMode; _savelowMode = _lowMode;
-                //    _saveunderlineMode = _underlineMode; _saveblinkMode = _blinkMode;
-                //    _savereverseMode = _reverseMode; _saveinvisibleMode = _invisibleMode;
-                //    break;
-                //case "[u": Row = _saveRow; Column = _saveColumn; break;
-                //case "8": Row = _saveRow; Column = _saveColumn;
-                //    _boldMode = _saveboldMode; _lowMode = _savelowMode;
-                //    _underlineMode = _saveunderlineMode; _blinkMode = _saveblinkMode;
-                //    _reverseMode = _savereverseMode; _invisibleMode = _saveinvisibleMode;
-                //    break;
+                ////case "[s": _saveRow = Row; _saveColumn = Column; break;
+                ////case "7": _saveRow = Row; _saveColumn = Column;
+                ////    _saveboldMode = _boldMode; _savelowMode = _lowMode;
+                ////    _saveunderlineMode = _underlineMode; _saveblinkMode = _blinkMode;
+                ////    _savereverseMode = _reverseMode; _saveinvisibleMode = _invisibleMode;
+                ////    break;
+                ////case "[u": Row = _saveRow; Column = _saveColumn; break;
+                ////case "8": Row = _saveRow; Column = _saveColumn;
+                ////    _boldMode = _saveboldMode; _lowMode = _savelowMode;
+                ////    _underlineMode = _saveunderlineMode; _blinkMode = _saveblinkMode;
+                ////    _reverseMode = _savereverseMode; _invisibleMode = _saveinvisibleMode;
+                ////    break;
 
-                //case "c": Reset(); break;
+                ////case "c": Reset(); break;
             }
         }
 
         private void ClearRange(int left, int top, int right, int bottom)
         {
             display.FillRectangle(
-                CharacterWidth * left + BorderWidth,
-                CharacterHeight * left + BorderWidth,
-                CharacterWidth * Math.Min(right, DisplayWidth) - 1 + BorderWidth,
-                CharacterHeight * Math.Min(bottom, DisplayHeight) - 1 + BorderWidth,
+                glyphs.Width * left + BorderWidth,
+                glyphs.Height * left + BorderWidth,
+                glyphs.Width * Math.Min(right, displayWidth) - 1 + BorderWidth,
+                glyphs.Height * Math.Min(bottom, displayHeight) - 1 + BorderWidth,
                 DisplayBackground);
 
-            for (int x = left; x < Math.Min(right, DisplayWidth); x++)
+            for (int x = left; x < Math.Min(right, displayWidth); x++)
             {
-                for (int y = top; y < Math.Min(bottom, DisplayHeight); y++)
+                for (int y = top; y < Math.Min(bottom, displayHeight); y++)
                 {
-                    cells[y * DisplayWidth + x] = (byte)' ';
+                    cells[y * displayWidth + x] = (byte)' ';
                 }
             }
         }
@@ -427,41 +449,41 @@
         private void Scroll()
         {
             display.Blit(
-                new Rect(BorderWidth, BorderWidth, CharacterWidth * DisplayWidth, CharacterHeight * (DisplayHeight - 1)),
+                new Rect(BorderWidth, BorderWidth, glyphs.Width * displayWidth, glyphs.Height * (displayHeight - 1)),
                 display,
-                new Rect(BorderWidth, CharacterHeight + BorderWidth, CharacterWidth * DisplayWidth, CharacterHeight * (DisplayHeight - 1)),
+                new Rect(BorderWidth, glyphs.Height + BorderWidth, glyphs.Width * displayWidth, glyphs.Height * (displayHeight - 1)),
                 WriteableBitmapExtensions.BlendMode.None);
 
             display.FillRectangle(
-                0, 
-                CharacterHeight * (DisplayHeight - 1), 
-                CharacterWidth * DisplayWidth - 1, 
-                CharacterHeight * DisplayHeight - 1, 
+                BorderWidth,
+                BorderWidth + glyphs.Height * (displayHeight - 1),
+                BorderWidth + glyphs.Width * displayWidth - 1,
+                BorderWidth + glyphs.Height * displayHeight - 1,
                 DisplayBackground);
 
-            for (int x = 0; x < DisplayWidth; x++)
+            for (int x = 0; x < displayWidth; x++)
             {
-                for (int y = 1; y < DisplayHeight; y++)
+                for (int y = 1; y < displayHeight; y++)
                 {
-                    cells[(y - 1) * DisplayWidth + x] = cells[1 * DisplayWidth + x];
+                    cells[(y - 1) * displayWidth + x] = cells[1 * displayWidth + x];
                 }
             }
 
-            for (int x = 0; x < DisplayWidth; x++)
+            for (int x = 0; x < displayWidth; x++)
             {
-                cells[(DisplayHeight - 1) * DisplayWidth + x] = (byte)' ';
+                cells[(displayHeight - 1) * displayWidth + x] = (byte)' ';
             }
         }
 
         private void DrawCharacter(byte c)
         {
-            cells[y * DisplayWidth + x] = c;
+            cells[y * displayWidth + x] = c;
 
             // the glyphs are currently 10x20 pixel bitmaps
             display.Blit(
-                new Rect(CharacterWidth * x + BorderWidth, CharacterHeight * y + BorderWidth, CharacterWidth, CharacterHeight),
+                new Rect(glyphs.Width * x + BorderWidth, glyphs.Height * y + BorderWidth, glyphs.Width, glyphs.Height),
                 glyphs[c],
-                new Rect(0, 0, CharacterWidth, CharacterHeight),
+                new Rect(0, 0, glyphs.Width, glyphs.Height),
                 WriteableBitmapExtensions.BlendMode.None);
         }
 
@@ -473,7 +495,7 @@
             {
                 e.Handled = true;
 
-                KeyPressed(this, code.Value);
+                KeyPressed(this, new SendByteEventArgs { Value = code.Value });
             }
         }
 

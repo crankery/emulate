@@ -1,0 +1,12 @@
+C:\Users\dahami\Documents\Git\emulate\Emulate.Common\bin\Debug\Crankery.Emulate.Common.dll
+C:\Users\dahami\Documents\Git\emulate\Emulate.Common\bin\Debug\Crankery.Emulate.Common.pdb
+C:\Users\dahami\Documents\Git\emulate\Emulate.Common\obj\Debug\Emulate.Common.csprojResolveAssemblyReference.cache
+C:\Users\dahami\Documents\Git\emulate\Emulate.Common\obj\Debug\Crankery.Emulate.Common.dll
+C:\Users\dahami\Documents\Git\emulate\Emulate.Common\obj\Debug\Crankery.Emulate.Common.pdb
+C:\Users\dahami\Documents\Git\emulate\Emulate.Common\bin\Debug\WriteableBitmapEx.Wpf.dll
+C:\Users\dahami\Documents\Git\emulate\Emulate.Common\bin\Debug\WriteableBitmapEx.Wpf.pdb
+C:\Users\dahami\Documents\Git\emulate\Emulate.Common\bin\Debug\WriteableBitmapEx.Wpf.xml
+C:\Users\dahami\Documents\Git\emulate\Emulate.Common\obj\Debug\Terminal.baml
+C:\Users\dahami\Documents\Git\emulate\Emulate.Common\obj\Debug\Terminal.g.cs
+C:\Users\dahami\Documents\Git\emulate\Emulate.Common\obj\Debug\Crankery.Emulate.Common_MarkupCompile.cache
+C:\Users\dahami\Documents\Git\emulate\Emulate.Common\obj\Debug\Crankery.Emulate.Common.g.resources

@@ -1,8 +1,7 @@
 ﻿namespace Crankery.Emulate.Altair8800
 {
-    using System;
     using System.Collections.Generic;
-    using System.Threading;
+    using Crankery.Emulate.Common;
 
     /// <summary>
     /// A MITS SIO2 card with two serial ports.
@@ -14,18 +13,28 @@
     {
         private readonly Queue<byte> data = new Queue<byte>();
         
-        public delegate void SendByte(object sender, byte b);
-
         /// <summary>
         /// Send a character to the terminal's display.
         /// </summary>
-        public event SendByte Send = delegate { };
+        public event SendByteEventArgs.SendByteEvent Send = delegate { };
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SerialInputOutput"/> class.
+        /// </summary>
+        /// <param name="devices">The devices.</param>
         public SerialInputOutput(Devices devices)
             : this(devices, 0x10, 0x11, 0x12, 0x13)
         {
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SerialInputOutput"/> class.
+        /// </summary>
+        /// <param name="devices">The devices.</param>
+        /// <param name="statusPort0">The status port0.</param>
+        /// <param name="dataPort0">The data port0.</param>
+        /// <param name="statusPort1">The status port1.</param>
+        /// <param name="dataPort1">The data port1.</param>
         public SerialInputOutput(Devices devices, byte statusPort0, byte dataPort0, byte statusPort1, byte dataPort1)
         {
             devices.RegisterInputPort(
@@ -55,10 +64,10 @@
                 });
 
             devices.RegisterOutputPort(
-                dataPort0, 
-                (b) => 
+                dataPort0,
+                (b) =>
                 {
-                    Send(this, (byte)(b & 0x7f));
+                    Send(this, new SendByteEventArgs { Value = (byte)(b & 0x7f) });
                 });
 
             devices.RegisterInputPort(

@@ -1,12 +1,8 @@
-﻿using Crankery.Emulate.Core.Intel8080;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Crankery.Emulate.Core.Tests.Intel8080
+﻿namespace Crankery.Emulate.Core.Tests.Intel8080
 {
+    using System;
+    using Crankery.Emulate.Core.Intel8080;
+
     public class MockDevices : IDevices
     {
         public MockDevices()

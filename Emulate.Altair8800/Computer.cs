@@ -1,22 +1,35 @@
-﻿
+﻿// <copyright file="Computer.cs" company="Crankery">
+// Copyright (c) 2014 All Rights Reserved
+// </copyright>
+// <author>Dave Hamilton</author>
+
 namespace Crankery.Emulate.Altair8800
 {
+    using System;
+    using System.IO;
+    using System.Threading;
     using Crankery.Emulate.Core;
     using Crankery.Emulate.Core.Intel8080;
     using NLog;
-    using System.IO;
-    using System.Threading;
 
-    public class Computer
+    /// <summary>
+    /// The Altair 8800 computer.
+    /// </summary>
+    public class Computer : IDisposable
     {
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
-        // 2 MHz CPU
+        /// <summary>
+        /// 2 MHz CPU 
+        /// </summary>
         public const ulong CpuFrequency = 2000000;
 
         private ManualResetEvent attention;
         private Thread bgThread;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Computer"/> class.
+        /// </summary>
         public Computer()
         {
             Memory = new Memory();
@@ -27,10 +40,28 @@ namespace Crankery.Emulate.Altair8800
             FrontPanel = new FrontPanel(Devices);
         }
 
+        /// <summary>
+        /// Gets the serial input output.
+        /// </summary>
+        /// <value>
+        /// The serial input output.
+        /// </value>
         public SerialInputOutput SerialInputOutput { get; private set; }
 
+        /// <summary>
+        /// Gets the disk.
+        /// </summary>
+        /// <value>
+        /// The disk.
+        /// </value>
         public Disk Disk { get; private set; }
 
+        /// <summary>
+        /// Gets the front panel.
+        /// </summary>
+        /// <value>
+        /// The front panel.
+        /// </value>
         public FrontPanel FrontPanel { get; private set; }
 
         private Intel8080Cpu Cpu { get; set; }
@@ -39,6 +70,9 @@ namespace Crankery.Emulate.Altair8800
 
         private Devices Devices { get; set; }
 
+        /// <summary>
+        /// Starts this instance.
+        /// </summary>
         public void Start()
         {
             attention = new ManualResetEvent(false);
@@ -47,6 +81,9 @@ namespace Crankery.Emulate.Altair8800
             bgThread.Start();
         }
 
+        /// <summary>
+        /// Stops this instance.
+        /// </summary>
         public void Stop()
         {
             attention.Set();
@@ -55,10 +92,22 @@ namespace Crankery.Emulate.Altair8800
             Disk.Load(0, null);
         }
 
+        /// <summary>
+        /// Resets this instance.
+        /// </summary>
         public void Reset()
         {
             Stop();
             Start();
+        }
+
+        /// <summary>
+        /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+        /// </summary>
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
         }
 
         private void Run()
@@ -125,6 +174,19 @@ namespace Crankery.Emulate.Altair8800
 
             timer.Change(Timeout.Infinite, Timeout.Infinite);
             timer.Dispose();
+        }
+
+        private void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                if (attention != null)
+                {
+                    Stop();
+                    attention.Dispose();
+                    attention = null;
+                }
+            }
         }
     }
 }

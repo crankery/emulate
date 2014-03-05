@@ -1,8 +1,11 @@
 ﻿namespace Crankery.Emulate.Altair8800
 {
-    using NLog;
     using System;
+    using NLog;
 
+    /// <summary>
+    /// Altair 8800 floppy disk.
+    /// </summary>
     public class Disk
     {
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
@@ -21,11 +24,22 @@
         private byte[][] diskImage = new byte[DriveCount][];
         private DriveStatus[] diskStatus = new DriveStatus[DriveCount];
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Disk"/> class.
+        /// </summary>
+        /// <param name="devices">The devices.</param>
         public Disk(Devices devices)
             : this(devices, 0x8, 0x9, 0xa)
         {
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Disk"/> class.
+        /// </summary>
+        /// <param name="devices">The devices.</param>
+        /// <param name="port0">The port0.</param>
+        /// <param name="port1">The port1.</param>
+        /// <param name="port2">The port2.</param>
         public Disk(Devices devices, byte port0, byte port1, byte port2)
         {
             for (int i = 0; i < DriveCount; i++)

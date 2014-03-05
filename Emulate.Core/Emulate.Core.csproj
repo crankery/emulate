@@ -22,6 +22,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <RunCodeAnalysis>true</RunCodeAnalysis>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -32,6 +33,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <RunCodeAnalysis>true</RunCodeAnalysis>
   </PropertyGroup>
   <PropertyGroup>
     <StartupObject />
@@ -50,7 +52,6 @@
     <Compile Include="HexLoad.cs" />
     <Compile Include="Cpu.cs" />
     <Compile Include="Intel8080\Flag.cs" />
-    <Compile Include="WriteLogMessage.cs" />
     <Compile Include="Memory.cs" />
     <Compile Include="Intel8080\InputPort.cs" />
     <Compile Include="Intel8080\OutputPort.cs" />
@@ -96,6 +97,7 @@
     <Compile Include="Intel8080\Register.cs" />
     <Compile Include="Intel8080\RegisterPair.cs" />
     <Compile Include="Intel8080\Registers.cs" />
+    <Compile Include="WriteMessageEventArgs.cs" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Intel8080\Intel8080Cpu.Accumulator.cs" />
