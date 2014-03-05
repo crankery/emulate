@@ -8,6 +8,7 @@ namespace Crankery.Emulate.Core
     using System;
     using System.Collections.Generic;
     using System.Reflection;
+    using System.Linq;
 
     public abstract class Cpu<TOpcode> where TOpcode : OpcodeAttribute
     {
@@ -90,7 +91,7 @@ namespace Crankery.Emulate.Core
             var methodInfos = this.GetType().GetMethods(BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance);
             foreach (var methodInfo in methodInfos)
             {
-                var opcodeAttributes = methodInfo.GetCustomAttributes<TOpcode>();
+                var opcodeAttributes = methodInfo.GetCustomAttributes(typeof(TOpcode), true).Cast<TOpcode>();
                 foreach (var opcodeAttribute in opcodeAttributes)
                 {
                     var execute = (Func<TOpcode, byte[], int>)Delegate.CreateDelegate(typeof(Func<TOpcode, byte[], int>), this, methodInfo);
@@ -103,7 +104,8 @@ namespace Crankery.Emulate.Core
 
                     if (operations.ContainsKey(opcodeAttribute.Instruction))
                     {
-                        throw new ApplicationException(string.Format("Duplicate opcode: 0x{0:x2}", opcodeAttribute.Instruction));
+                        throw new Exception(
+                            string.Format("Duplicate opcode: 0x{0:x2}", opcodeAttribute.Instruction));
                     }
 
                     operations[opcodeAttribute.Instruction] = operation;

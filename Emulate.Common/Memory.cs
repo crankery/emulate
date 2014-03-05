@@ -25,6 +25,8 @@ namespace Crankery.Emulate.Common
 
         public ushort ReadWord(ushort address)
         {
+            // TODO: this is a big/little endian issue
+            // this is the little impl
             return Utility.MakeWord(ram[address + 1], ram[address]);
         }
 
@@ -35,6 +37,8 @@ namespace Crankery.Emulate.Common
 
         public void Write(ushort address, ushort value)
         {
+            // TODO: this is a big/little endian issue
+            // this is the little impl
             ram[address] = value.GetLow();
             ram[address + 1] = value.GetHigh();
         }

@@ -180,7 +180,7 @@ namespace Crankery.Emulate.Core.Intel8080
                         Flags.Combined = value.GetLow();
                         break;
                     default:
-                        throw new ApplicationException("Unknown pair: " + pair);
+                        throw new NotImplementedException("Unknown pair: " + pair);
                 }
             }
         }
@@ -246,7 +246,7 @@ namespace Crankery.Emulate.Core.Intel8080
                         memory.Write(HL, value);
                         break;
                     default:
-                        throw new ApplicationException("Unknown register: " + register);
+                        throw new NotImplementedException("Unknown register: " + register);
                 }
             }
         }
