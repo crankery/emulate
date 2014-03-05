@@ -40,19 +40,15 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
-    <Reference Include="System.Core" />
     <Reference Include="Microsoft.CSharp" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BinLoad.cs" />
     <Compile Include="CircularBuffer.cs" />
     <Compile Include="CpuAttribute.cs" />
     <Compile Include="Endian.cs" />
     <Compile Include="Intel8080\State.cs" />
-    <Compile Include="HexLoad.cs" />
     <Compile Include="Cpu.cs" />
     <Compile Include="Intel8080\Flag.cs" />
-    <Compile Include="Memory.cs" />
     <Compile Include="Intel8080\InputPort.cs" />
     <Compile Include="Intel8080\OutputPort.cs" />
     <Compile Include="Intel8080\Port.cs" />

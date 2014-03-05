@@ -3,8 +3,10 @@
 // </copyright>
 // <author>Dave Hamilton</author>
 
-namespace Crankery.Emulate.Core
+namespace Crankery.Emulate.Common
 {
+    using Crankery.Emulate.Core;
+
     /// <summary>
     /// Basic block of 64k of ram.
     /// </summary>

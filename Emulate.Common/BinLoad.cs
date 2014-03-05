@@ -3,8 +3,10 @@
 // </copyright>
 // <author>Dave Hamilton</author>
 
-namespace Crankery.Emulate.Core
+namespace Crankery.Emulate.Common
 {
+    using Crankery.Emulate.Core;
+
     /// <summary>
     /// Load a binary file at a location in memory.
     /// </summary>

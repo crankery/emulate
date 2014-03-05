@@ -2,6 +2,7 @@
 {
     using System.IO;
     using System.Reflection;
+    using Crankery.Emulate.Common;
     using Crankery.Emulate.Core.Intel8080;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 

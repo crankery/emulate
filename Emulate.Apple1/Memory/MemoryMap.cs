@@ -1,8 +1,8 @@
 ﻿namespace Crankery.Emulate.Apple1
 {
     using System;
-    using System.Diagnostics;
     using System.IO;
+    using Crankery.Emulate.Common;
     using Crankery.Emulate.Core;
 
     public class MemoryMap : IMemory

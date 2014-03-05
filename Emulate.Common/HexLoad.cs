@@ -3,10 +3,11 @@
 // </copyright>
 // <author>Dave Hamilton</author>
 
-namespace Crankery.Emulate.Core
+namespace Crankery.Emulate.Common
 {
     using System;
     using System.Collections.Generic;
+    using Crankery.Emulate.Core;
 
     public static class HexLoad
     {

@@ -44,6 +44,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Emulate.Common\Emulate.Common.csproj">
+      <Project>{51df8f8b-b897-4c47-8839-e11609b1dc69}</Project>
+      <Name>Emulate.Common</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Emulate.Core\Emulate.Core.csproj">
       <Project>{85cd0c12-5daf-4a6a-8026-b32eb2255605}</Project>
       <Name>Emulate.Core</Name>

@@ -44,9 +44,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BinLoad.cs" />
     <Compile Include="DelegateCommand.cs" />
     <Compile Include="Glyphs.cs" />
+    <Compile Include="HexLoad.cs" />
     <Compile Include="KeyTranslate.cs" />
+    <Compile Include="Memory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SendByteEventArgs.cs" />
     <Compile Include="Terminal.xaml.cs">
@@ -62,6 +65,12 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Emulate.Core\Emulate.Core.csproj">
+      <Project>{85cd0c12-5daf-4a6a-8026-b32eb2255605}</Project>
+      <Name>Emulate.Core</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

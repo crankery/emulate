@@ -8,6 +8,7 @@ namespace Crankery.Emulate.Altair8800
     using System;
     using System.IO;
     using System.Threading;
+    using Crankery.Emulate.Common;
     using Crankery.Emulate.Core;
     using Crankery.Emulate.Core.Intel8080;
     using NLog;
