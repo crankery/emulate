@@ -67,6 +67,7 @@
   <ItemGroup>
     <Content Include="Intel8080\cpudiag.asm" />
     <Content Include="Intel8080\cpudiag.txt" />
+    <Content Include="Mos6502\6502_functional_test.lst" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
