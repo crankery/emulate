@@ -1,4 +1,4 @@
-Emulate is an 8 bit CPU emulation library written entirely in managed c#. The first CPUs to be emulated are the Intel 8080 and MOS 6502. I have a vague plan of doing the Z80 and 6809 at some point.
+Emulate is an 8 bit CPU emulation library written entirely in managed c#. The core emulation is contained in a Portable Class Library. The first CPUs to be emulated are the Intel 8080 and MOS 6502. I have a vague plan of doing the Z80 and 6809 at some point.
 
 I tried to chose straightforward implementation over efficiency. If you want an efficient emulation there's loads of really good implementations. :)
 
